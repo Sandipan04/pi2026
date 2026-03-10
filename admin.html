@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WW 3.14159 // SECURE LIVE-OPS</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header style="border-bottom-color: var(--neon-pink); box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);">
+            <h1 style="color: var(--neon-pink); text-shadow: 0 0 5px var(--neon-pink);">[CLEARANCE: OMEGA] COMMAND CENTER</h1>
+            <nav>
+                <a href="index.html" class="admin-header-link">ABORT & RETURN TO RADAR</a>
+            </nav>
+        </header>
+
+        <main class="main-content" style="flex-direction: column; max-width: 1200px;">
+            
+            <h2 id="access-denied" style="color: var(--alert-red); display: none; text-align: center; margin-top: 50px; font-size: 2em; text-shadow: 0 0 10px var(--alert-red);">
+                FATAL: ACCESS DENIED. INTRUSION ATTEMPT LOGGED.
+            </h2>
+
+            <div id="admin-content" style="display: none;">
+                
+                <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
+                    <div class="panel-box" style="flex: 1; min-width: 300px; border-color: var(--alert-red);">
+                        <h3 style="color: var(--alert-red); border-bottom-color: var(--alert-red);">Global Supply Drop</h3>
+                        <p style="margin-bottom: 10px;">Trigger a server-wide event. Instantly credit Supply Points to every registered commander.</p>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="number" id="global-points-val" value="500" style="margin-bottom: 0;">
+                            <button id="btn-global-grant" class="danger">Execute Drop</button>
+                        </div>
+                    </div>
+
+                    <div class="panel-box" style="flex: 1; min-width: 300px; border-color: var(--neon-pink);">
+                        <h3 style="color: var(--neon-pink); border-bottom-color: var(--neon-pink);">Algorithm Override</h3>
+                        <p style="margin-bottom: 10px;">Force the tactical Pi approximation to the next Tier, applying $R(n)$ asymptotic error terms.</p>
+                        <button id="btn-advance-pi" style="border-color: var(--neon-pink); color: var(--neon-pink); width: 100%;">Force Algorithm Tier +1</button>
+                    </div>
+                </div>
+
+                <div class="panel-box">
+                    <h3 class="highlight">Active Commander Database</h3>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Commander (Username)</th>
+                                    <th>Radar Bases Found</th>
+                                    <th>Arsenal (Mk 2/3/5/8/13)</th>
+                                    <th>Current Points</th>
+                                    <th>Admin Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="player-table-body">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="js/admin.js"></script>
+</body>
+</html>
