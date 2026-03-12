@@ -64,6 +64,15 @@ async function initializeApp() {
     log("Booting Universe Engine...");
     await fetchPublicData();
 
+    // --- NEW: SMART DEVICE DETECTION ---
+    const controlsHint = document.getElementById('controls-hint');
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    
+    if (controlsHint && isTouchDevice) {
+        controlsHint.innerText = "[ Tap to Fire Payload | 2-Finger Drag to Pan | Pinch to Zoom ]";
+    }
+    // -----------------------------------
+
     const { data: { session } } = await supabase.auth.getSession();
 
     if (session) {
@@ -281,6 +290,105 @@ canvas.addEventListener('wheel', (event) => {
     if (camera.zoom < 0.2) camera.zoom = 0.2;
     if (camera.zoom > 3.0) camera.zoom = 3.0;
     drawGrid(currentChunkData, hoverX, hoverY);
+});
+
+// --- MOBILE TOUCH CONTROLS (Map-Style) ---
+let initialPinchDistance = null;
+let wasZoomingOrPanning = false; // Prevents the phantom missile!
+let lastPanX = 0;
+let lastPanY = 0;
+
+canvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+        // 1 FINGER: Prepare for a potential missile strike. 
+        // We DO NOT prevent default here, allowing the user to scroll the page.
+        wasZoomingOrPanning = false;
+        dragDistance = 0;
+        lastMouseX = e.touches[0].clientX;
+        lastMouseY = e.touches[0].clientY;
+    } else if (e.touches.length === 2) {
+        // 2 FINGERS: Lock the screen. Prepare to Pan and Zoom.
+        e.preventDefault(); 
+        wasZoomingOrPanning = true;
+        
+        // Calculate the center point between the two fingers for smooth panning
+        lastPanX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        lastPanY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+        
+        initialPinchDistance = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+        );
+    }
+}, { passive: false });
+
+canvas.addEventListener('touchmove', (e) => {
+    if (e.touches.length === 1) {
+        // User is swiping with 1 finger. Let the browser scroll the page normally!
+        // We just track the distance so we know to cancel the missile strike.
+        const deltaX = e.touches[0].clientX - lastMouseX;
+        const deltaY = e.touches[0].clientY - lastMouseY;
+        dragDistance += Math.abs(deltaX) + Math.abs(deltaY);
+    } 
+    else if (e.touches.length === 2) {
+        // User is using 2 fingers. Hijack the screen to move the game map!
+        e.preventDefault(); 
+
+        // 1. Pan the Camera (using the midpoint of the fingers)
+        const currentPanX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        const currentPanY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+
+        camera.x += (currentPanX - lastPanX);
+        camera.y += (currentPanY - lastPanY);
+
+        lastPanX = currentPanX;
+        lastPanY = currentPanY;
+
+        // 2. Zoom the Camera
+        if (initialPinchDistance) {
+            const currentDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            
+            const zoomDelta = (currentDistance - initialPinchDistance) * 0.005;
+            camera.zoom += zoomDelta;
+            
+            if (camera.zoom < 0.2) camera.zoom = 0.2;
+            if (camera.zoom > 3.0) camera.zoom = 3.0;
+            
+            initialPinchDistance = currentDistance;
+        }
+
+        drawGrid(currentChunkData, hoverX, hoverY);
+    }
+}, { passive: false });
+
+canvas.addEventListener('touchend', (e) => {
+    // Only process the action when ALL fingers have left the screen
+    if (e.touches.length === 0) {
+        
+        // Fire a missile ONLY if they used 1 finger, didn't scroll the page, and weren't zooming
+        if (!wasZoomingOrPanning && dragDistance < 15) { 
+            
+            // Calculate the exact grid coordinates of the tap
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = lastMouseX - rect.left;
+            const mouseY = lastMouseY - rect.top;
+            const coords = getGridCoords(mouseX, mouseY);
+            
+            hoverX = coords.gridX;
+            hoverY = coords.gridY;
+
+            // Trigger the click listener
+            const clickEvent = new MouseEvent('click');
+            canvas.dispatchEvent(clickEvent);
+        }
+        
+        // Reset states for the next interaction
+        initialPinchDistance = null;
+        wasZoomingOrPanning = false; 
+    }
 });
 
 // Mouse Click: Fire Missiles

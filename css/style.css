@@ -166,19 +166,48 @@ canvas {
 /* --- MOBILE RESPONSIVENESS --- */
 @media (max-width: 768px) {
     .main-content {
-        flex-direction: column; /* Stack HUD on top of Radar */
+        /* CRITICAL: This puts the Radar on TOP of the HUD on phones! */
+        flex-direction: column-reverse; 
         padding: 10px;
+        gap: 15px;
     }
+    
+    .view-container {
+        /* Gives the canvas exactly half the phone screen so it's always playable */
+        height: 50vh; 
+        min-height: 400px; 
+    }
+    
+    .hud-panel {
+        min-width: 100%;
+    }
+    
     header {
         flex-direction: column;
         gap: 10px;
+        text-align: center;
     }
+    
+    header h1 {
+        font-size: 1.2rem;
+    }
+    
     nav {
+        width: 100%;
         flex-wrap: wrap;
         justify-content: center;
     }
-    .hud-panel {
-        min-width: 100%;
+    
+    nav button {
+        font-size: 0.85rem;
+        padding: 8px;
+        flex: 1; /* Makes buttons span the width of the screen evenly */
+    }
+
+    /* Make buttons bigger for "fat fingers" on touch screens */
+    .buy-btn, button {
+        padding: 12px; 
+        font-weight: bold;
     }
 }
 
