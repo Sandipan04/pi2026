@@ -53,10 +53,30 @@ function gcd(a, b) {
 
 function resizeCanvas() {
     const wrapper = canvas.parentElement;
-    canvas.width = wrapper.clientWidth;
-    canvas.height = wrapper.clientHeight;
+    
+    // 1. Shrink canvas to 0px so it doesn't artificially stretch the wrapper
+    // canvas.style.width = '0px';
+    // canvas.style.height = '0px';
+    
+    // 2. Measure the wrapper (which is now safely locked open by min-height)
+    let availableWidth = wrapper.clientWidth;
+    let availableHeight = wrapper.clientHeight;
+
+    // 3. Enforce the Rule: Height can NEVER be greater than Width
+    if (availableHeight > availableWidth) {
+        availableHeight = availableWidth; 
+    }
+
+    // 4. Apply the perfect, constrained dimensions
+    canvas.width = availableWidth;
+    canvas.height = availableHeight;
+    canvas.style.width = availableWidth + 'px';
+    canvas.style.height = availableHeight + 'px';
+
+    // 5. Redraw the radar
     if (currentChunkData) drawGrid(currentChunkData, hoverX, hoverY);
 }
+
 window.addEventListener('resize', resizeCanvas);
 setTimeout(resizeCanvas, 100); // Trigger once on load
 
@@ -138,13 +158,35 @@ async function fetchPublicData() {
 
 async function fetchPrivateData() {
     try {
-        // NEW: Added is_admin to the select query
-        const { data: user, error } = await supabase.from('users').select('id, points, lifetime_points, equipped_color, unlocked_colors, bomb_2, bomb_3, bomb_5, bomb_8, bomb_13, is_admin').single();
-        if (!error && user) {
-            currentUserId = user.id;
-            localPoints = user.points; localLifetime = user.lifetime_points; equippedColor = user.equipped_color;
-            localBomb2 = user.bomb_2; localBomb3 = user.bomb_3; localBomb5 = user.bomb_5; localBomb8 = user.bomb_8; localBomb13 = user.bomb_13;
+        // 1. Get the current securely logged-in user's ID
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return;
+        
+        currentUserId = session.user.id; // Save it to the global variable
 
+        // 2. Fetch ONLY this specific commander's row
+        const { data: user, error } = await supabase
+            .from('users')
+            .select('id, points, lifetime_points, equipped_color, unlocked_colors, bomb_2, bomb_3, bomb_5, bomb_8, bomb_13, is_admin')
+            .eq('id', currentUserId) // CRITICAL FIX: Filters out everyone else
+            .single();
+
+        if (error) {
+            console.error("Database fetch error:", error);
+            return;
+        }
+
+        if (user) {
+            localPoints = user.points; 
+            localLifetime = user.lifetime_points; 
+            equippedColor = user.equipped_color;
+            localBomb2 = user.bomb_2; 
+            localBomb3 = user.bomb_3; 
+            localBomb5 = user.bomb_5; 
+            localBomb8 = user.bomb_8; 
+            localBomb13 = user.bomb_13;
+
+            // Safely update the HUD
             updateUI('point-count', localPoints);
             updateUI('bomb-2-count', localBomb2);
             updateUI('bomb-3-count', localBomb3);
@@ -152,7 +194,7 @@ async function fetchPrivateData() {
             updateUI('bomb-8-count', localBomb8);
             updateUI('bomb-13-count', localBomb13);
 
-            // NEW: Inject the Admin Link if authorized
+            // Inject the Admin Link if authorized
             if (user.is_admin) {
                 const userInfo = document.getElementById('user-info');
                 if (userInfo && !userInfo.innerHTML.includes('ADMIN')) {
@@ -493,6 +535,14 @@ if (btnCheat) {
     btnCheat.addEventListener('click', async () => {
         await cheatPoints(currentUserId, localPoints, localLifetime);
         fetchPrivateData();
+    });
+}
+
+// --- NAVIGATION TO CRYPTO TERMINAL ---
+const btnMinigames = document.getElementById('nav-minigames');
+if (btnMinigames) {
+    btnMinigames.addEventListener('click', () => {
+        window.location.href = 'arcade.html'; // Redirects to the new hub!
     });
 }
 
