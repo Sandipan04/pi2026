@@ -3,111 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>World War 3.14159</title>
+    <title>WW 3.14159 // INTELLIGENCE DOSSIER</title>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* Smooth scrolling for anchor links */
+        html { scroll-behavior: smooth; }
+
+        .hero { text-align: center; padding: 50px 20px; border-bottom: 2px dashed var(--neon-cyan); margin-bottom: 30px; }
+        .hero h1 { font-size: 3rem; color: var(--neon-pink); text-shadow: 0 0 15px var(--neon-pink); }
+        .hero-btn { display: inline-block; margin-top: 20px; font-size: 1.5rem; padding: 15px 40px; background: var(--neon-cyan); color: #000; text-decoration: none; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+        .hero-btn:hover { box-shadow: 0 0 20px var(--neon-cyan); transform: scale(1.05); }
+        
+        /* --- NEW TWO-COLUMN LAYOUT --- */
+        .dossier-wrapper {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start; /* Required for sticky positioning to work */
+            margin-bottom: 50px;
+        }
+
+        /* --- THE STICKY SIDEBAR --- */
+        .sidebar {
+            flex: 0 0 280px;
+            position: sticky;
+            top: 20px; /* How far from the top of the screen it sticks */
+            background: rgba(0, 20, 30, 0.8);
+            border: 1px solid var(--neon-cyan);
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
+        }
+
+        .sidebar h3 { color: var(--neon-cyan); border-bottom: 1px dashed var(--neon-cyan); padding-bottom: 10px; margin-bottom: 15px; }
+        
+        .sidebar a {
+            display: block;
+            color: var(--neon-gold);
+            text-decoration: none;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            transition: 0.2s;
+            line-height: 1.3;
+        }
+        
+        .sidebar a:hover {
+            color: var(--neon-pink);
+            padding-left: 8px; /* Cool hover indent effect */
+        }
+
+        /* --- THE MAIN CONTENT --- */
+        .dossier-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .guide-section { background: rgba(0, 20, 30, 0.5); border: 1px solid #333; padding: 20px; margin-bottom: 30px; }
+        
+        /* Markdown generated styles */
+        .guide-section h3 { color: var(--neon-gold); margin-bottom: 10px; border-bottom: 1px dashed #333; padding-bottom: 5px; }
+        .guide-section ul { margin-left: 20px; margin-bottom: 10px; }
+        .guide-section p { margin-bottom: 10px; }
+        .guide-section strong { color: var(--neon-cyan); }
+
+        /* Mobile layout override */
+        @media (max-width: 768px) {
+            .dossier-wrapper { flex-direction: column; }
+            .sidebar { position: static; width: 100%; flex: none; margin-bottom: 20px; }
+        }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <header>
-            <h1>WW 3.14159 // TACTICAL COMMAND</h1>
-            <nav id="nav-bar" class="hidden">
-                <button id="nav-universe">Radar Map</button>
-                <button id="nav-market">Munitions Hub</button>
-                <button id="nav-leaderboard">Commanders</button>
-            </nav>
-        </header>
+    <div class="app-container" style="max-width: 1200px; margin: 0 auto; display: block;">
+        
+        <section class="hero">
+            <h1>WORLD WAR 3.14159</h1>
+            <p style="font-size: 1.2rem; margin-top: 10px; color: var(--neon-cyan);">Global tactical command and cryptographic warfare.</p>
+            <a href="radar.html" class="hero-btn">INITIATE CONNECTION</a>
+        </section>
 
-        <main class="main-content">
+        <main class="dossier-wrapper">
             
-            <aside class="hud-panel">
+            <aside class="sidebar" id="toc-sidebar">
+                <h3>DIRECTORY INDEX</h3>
+                <a href="#global-manual-container">> Global Command Manual</a>
+                </aside>
+
+            <section class="dossier-content">
+                <h2 style="color: var(--neon-pink); margin-bottom: 20px;">[ INTELLIGENCE DOSSIER ]</h2>
+                <p style="margin-bottom: 30px;">Review the tactical briefings below before engaging enemy protocols.</p>
                 
-                <div id="auth-section" class="panel-box">
-                    <h3>Identify Commander</h3>
-                    <input type="text" id="display-name" placeholder="Callsign (Signup Only)">
-                    <input type="email" id="email" placeholder="Secure Email">
-                    <input type="password" id="password" placeholder="Clearance Code">
-                    <div style="display: flex; gap: 5px;">
-                        <button id="btn-login" style="flex: 1;">Login</button>
-                        <button id="btn-signup" style="flex: 1;">Enlist</button>
+                <div id="global-manual-container" class="guide-section" style="border-color: var(--neon-cyan);">
+                    <p style="color: var(--neon-cyan);">Decrypting Global Command Manual...</p>
+                </div>
+
+                <div id="guides-container">
                     </div>
-                </div>
-
-                <div id="game-controls" class="hidden">
-                    <div class="panel-box">
-                        <h3 id="user-info">Awaiting Orders...</h3>
-                        <p>Supply Points: <strong id="point-count" class="gold-text">0</strong></p>
-                        <hr style="border: 0; border-bottom: 1px solid #333; margin: 10px 0;">
-                        
-                        <p style="font-size: 0.9em; margin-bottom: 5px;">Select Payload:</p>
-                        <select id="tool-selector">
-                            <option value="2">Mk-2 Cluster [Ammo: <span id="bomb-2-count">0</span>]</option>
-                            <option value="3">Mk-3 Hornet [Ammo: <span id="bomb-3-count">0</span>]</option>
-                            <option value="5">Mk-5 Tomahawk [Ammo: <span id="bomb-5-count">0</span>]</option>
-                            <option value="8">Mk-8 Devastator [Ammo: <span id="bomb-8-count">0</span>]</option>
-                            <option value="13">Mk-13 Armageddon [Ammo: <span id="bomb-13-count">0</span>]</option>
-                        </select>
-                        <button id="btn-logout" class="danger" style="width: 100%; margin-top: 10px;">Disconnect</button>
-                    </div>
-                </div>
-
-                <div class="panel-box">
-                    <h3>Global Intelligence</h3>
-                    <p>Current Pi Approx: <strong id="pi-estimate" class="highlight" style="font-size: 1.2em;">Loading...</strong></p>
-                    <p>Algorithm Tier: <span id="pi-tier-display" class="pink-text">0</span></p>
-                    <br>
-                    <p>Active Theater: <span id="grid-size-display" class="highlight">100x100</span></p>
-                    <p>Impact Craters: <span id="total-placed-display">0</span></p>
-                    <p>Bases Revealed: <span id="total-glowing-display" class="highlight">0</span></p>
-                    <p>Target Coordinates: <strong id="hover-coord" class="gold-text">(0, 0)</strong></p>
-                </div>
-
-                <div class="panel-box">
-                    <h3>War Effort (Global Points)</h3>
-                    <p><strong id="global-points-display">0</strong> / <span id="global-next-goal">10000</span></p>
-                    <div style="width: 100%; background: #111; height: 12px; margin-top: 5px; border-radius: 2px; border: 1px solid #333;">
-                        <div id="global-progress-bar" style="width: 0%; background: var(--neon-pink); height: 100%; transition: width 0.5s;"></div>
-                    </div>
-                </div>
-
-                <div class="panel-box terminal-log" id="log">
-                    > Securing connection to central server...
-                </div>
-            </aside>
-
-            <section class="view-container">
-                
-                <div id="view-universe">
-                    <div class="radar-wrapper">
-                        <canvas id="universe" width="800" height="800"></canvas>
-                    </div>
-                    <p id="controls-hint" style="text-align: center; margin-top: 10px; opacity: 0.7; font-size: 0.9em;">
-                        [ Left-Click to Fire Payload | Click & Drag to Pan Camera | Scroll to Zoom ]
-                    </p>
-                </div>
-
-                <div id="view-market" class="hidden panel-box">
-                    <h2>Munitions Factory</h2>
-                    <p style="margin-bottom: 20px;">Use your Supply Points to requisition heavier payloads.</p>
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <button class="buy-btn" data-type="bomb" data-val="2" data-cost="60">Mk-2 Cluster (60 pts)</button>
-                        <button class="buy-btn" data-type="bomb" data-val="3" data-cost="140">Mk-3 Hornet (140 pts)</button>
-                        <button class="buy-btn" data-type="bomb" data-val="5" data-cost="390">Mk-5 Tomahawk (390 pts)</button>
-                        <button class="buy-btn" data-type="bomb" data-val="8" data-cost="1005">Mk-8 Devastator (1005 pts)</button>
-                        <button class="buy-btn" data-type="bomb" data-val="13" data-cost="2650">Mk-13 Armageddon (2650 pts)</button>
-                    </div>
-                </div>
-
-                <div id="view-leaderboard" class="hidden panel-box">
-                    <h2>Top Commanders</h2>
-                    <ul id="leaderboard-list" style="list-style-type: none; margin-top: 20px;"></ul>
-                </div>
-
             </section>
+            
         </main>
+
+        <footer style="padding: 30px 20px; text-align: center; border-top: 1px dashed var(--neon-pink); background: rgba(0, 0, 0, 0.5);">
+            <p style="color: var(--alert-red); font-weight: bold; margin-bottom: 10px; letter-spacing: 1px;">[ TRANSMISSION STATUS: UNDER ACTIVE CONSTRUCTION ]</p>
+            <p style="font-size: 0.9em; max-width: 600px; margin: 0 auto 30px auto; opacity: 0.8;">
+                The command center is in an active state of development. However, tactical drops are fully authorized. Expect new cryptographic arcade puzzles, expanded arsenals, and continuous UI upgrades in future transmissions.
+            </p>
+            
+            <h4 style="color: var(--neon-pink); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px;">Architects // Creators</h4>
+            <p style="font-size: 1.1em;">
+                <a href="https://sandipan04.github.io/webpage/" target="_blank" style="color: var(--neon-cyan); text-decoration: none; font-weight: bold;">Sandipan Samanta</a> 
+                <span style="color: #555; margin: 0 10px;"> // </span> 
+                <a href="https://sites.google.com/view/aadityavicramsaraf/" target="_blank" style="color: var(--neon-cyan); text-decoration: none; font-weight: bold;">Aaditya Vicram saraf</a>
+            </p>
+        </footer>
+
     </div>
 
-    <script type="module" src="js/main.js"></script>
+    <script type="module">
+        import { missions } from './js/missions.js';
+
+        const sidebar = document.getElementById('toc-sidebar');
+
+        // 1. Fetch the Global Manual
+        async function loadGlobalManual() {
+            const container = document.getElementById('global-manual-container');
+            try {
+                const response = await fetch('manual.md');
+                if (response.ok) {
+                    const text = await response.text();
+                    container.innerHTML = marked.parse(text);
+                } else {
+                    container.style.display = 'none';
+                }
+            } catch (err) {
+                console.error("Failed to load global manual.");
+            }
+        }
+
+        // 2. Fetch the Minigame Guides & Build the Sidebar Directory
+        async function loadArcadeGuides() {
+            const container = document.getElementById('guides-container');
+            container.innerHTML = ''; 
+
+            for (const mission of missions) {
+                if (mission.guide && mission.status !== 'classified') {
+                    try {
+                        const response = await fetch(mission.guide);
+                        if (response.ok) {
+                            const markdownText = await response.text();
+                            
+                            // Create the content block
+                            const guideDiv = document.createElement('div');
+                            guideDiv.className = 'guide-section';
+                            
+                            // NEW: Give the block an ID so the sidebar can link to it
+                            const sectionId = `guide-${mission.id}`;
+                            guideDiv.id = sectionId; 
+                            
+                            guideDiv.innerHTML = marked.parse(markdownText);
+                            container.appendChild(guideDiv);
+
+                            // NEW: Create the Sidebar Link
+                            const link = document.createElement('a');
+                            link.href = `#${sectionId}`;
+                            link.innerText = `> ${mission.title}`;
+                            sidebar.appendChild(link);
+                        }
+                    } catch (err) {
+                        console.error("Error loading guide:", err);
+                    }
+                }
+            }
+        }
+
+        loadGlobalManual();
+        loadArcadeGuides();
+    </script>
 </body>
 </html>

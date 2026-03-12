@@ -1,0 +1,39 @@
+/* minigames/puzzle_01/lightsout.css */
+
+.lights-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    max-width: 350px;
+    margin: 0 auto;
+    padding: 10px;
+    background: rgba(0, 20, 30, 0.5);
+    border: 1px solid var(--neon-cyan);
+    border-radius: 8px;
+}
+
+.light-btn {
+    aspect-ratio: 1 / 1;
+    background-color: #050a10;
+    border: 1px solid #1a2b3c;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border-radius: 4px;
+}
+
+.light-btn:hover {
+    background-color: rgba(0, 255, 204, 0.2);
+    border-color: var(--neon-cyan);
+}
+
+.light-btn.is-on {
+    background-color: var(--neon-cyan);
+    border-color: #FFF;
+    box-shadow: 0 0 15px var(--neon-cyan);
+}
+
+.light-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none; /* Stops hovering effects when the game is over */
+}

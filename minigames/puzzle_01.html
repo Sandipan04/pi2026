@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decryption: SYS.BOOT</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .game-area {
+            min-height: 400px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+        }
+        .win-btn {
+            background: rgba(0, 255, 204, 0.1); color: var(--neon-cyan); border: 2px solid var(--neon-cyan);
+            padding: 15px 30px; font-size: 1.2rem; cursor: pointer; text-transform: uppercase;
+            font-family: inherit; font-weight: bold; transition: 0.2s; margin-top: 20px;
+        }
+        .win-btn:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
+        .win-btn:disabled { opacity: 0.5; cursor: not-allowed; background: transparent; color: #555; border-color: #555; box-shadow: none; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1 style="color: var(--neon-cyan);">[MISSION] SYS.BOOT CALIBRATION</h1>
+            <nav>
+                <a href="../arcade.html" class="admin-header-link" style="color: var(--alert-red); border-color: var(--alert-red);">ABORT MISSION</a>
+            </nav>
+        </header>
+
+        <main class="main-content" style="justify-content: center; align-items: center;">
+            <div class="panel-box" style="width: 100%; max-width: 800px;">
+                <h3 class="highlight">Terminal Output</h3>
+                
+                <div class="game-area">
+                    <p style="font-size: 1.2rem; margin-bottom: 10px;">Press the button to simulate a successful decryption sequence.</p>
+                    <p class="gold-text">Bounty: +50 Supply Points</p>
+                    
+                    <button id="trigger-win" class="win-btn">Execute Decryption Routine</button>
+                    
+                    <p id="game-status" style="margin-top: 20px; color: var(--neon-pink); font-weight: bold; min-height: 24px;"></p>
+                </div>
+                
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { supabase } from '../js/supabase.js';
+
+        let currentUserId = null;
+        const btnWin = document.getElementById('trigger-win');
+        const statusText = document.getElementById('game-status');
+
+        // 1. Authenticate the Commander
+        async function verifyClearance() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                alert("Security Breach: Commander not identified.");
+                window.location.href = '../index.html';
+                return;
+            }
+            currentUserId = session.user.id;
+        }
+
+        // 2. The Victory Function
+        btnWin.addEventListener('click', async () => {
+            if (!currentUserId) return;
+            
+            btnWin.disabled = true;
+            statusText.innerText = "> Transmitting decryption key to High Command...";
+            statusText.style.color = "var(--neon-cyan)";
+
+            // Grant the points securely using the same logic the Admin panel uses
+            const { data, error } = await supabase.rpc('admin_grant_points', { 
+                p_target_id: currentUserId, 
+                p_points: 50 
+            });
+
+            if (!error && data) {
+                statusText.innerText = "> Decryption successful. 50 Supply Points deposited. You may return to the Arcade.";
+                statusText.style.color = "var(--neon-gold)";
+                btnWin.innerText = "MISSION ACCOMPLISHED";
+            } else {
+                statusText.innerText = "> Error: Signal intercepted. Points lost.";
+                statusText.style.color = "var(--alert-red)";
+                btnWin.disabled = false;
+            }
+        });
+
+        // Start
+        verifyClearance();
+    </script>
+</body>
+</html>

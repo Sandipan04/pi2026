@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World War 3.14159</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>WW 3.14159 // TACTICAL COMMAND</h1>
+            <nav id="nav-bar" class="hidden">
+                <button id="nav-universe">Radar Map</button>
+                <button id="nav-market">Munitions Hub</button>
+                <button id="nav-minigames" style="color: var(--neon-pink); border-color: var(--neon-pink);">Crypto Terminal</button>
+                <button id="nav-leaderboard">Commanders</button>
+                
+                <button onclick="window.location.href='index.html'" style="color: var(--neon-gold); border-color: var(--neon-gold);">Field Manual</button>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            
+            <aside class="hud-panel">
+                
+                <div id="auth-section" class="panel-box">
+                    <h3>Identify Commander</h3>
+                    <input type="text" id="display-name" placeholder="Callsign (Signup Only)">
+                    <input type="email" id="email" placeholder="Secure Email">
+                    <input type="password" id="password" placeholder="Clearance Code">
+                    <div style="display: flex; gap: 5px;">
+                        <button id="btn-login" style="flex: 1;">Login</button>
+                        <button id="btn-signup" style="flex: 1;">Enlist</button>
+                    </div>
+                </div>
+
+                <div id="game-controls" class="hidden">
+                    <div class="panel-box">
+                        <h3 id="user-info">Awaiting Orders...</h3>
+                        <p>Supply Points: <strong id="point-count" class="gold-text">0</strong></p>
+                        <hr style="border: 0; border-bottom: 1px solid #333; margin: 10px 0;">
+                        
+                        <p style="font-size: 0.9em; margin-bottom: 5px;">Select Payload:</p>
+                        <select id="tool-selector">
+                            <option value="2">Mk-2 Cluster [Ammo: <span id="bomb-2-count">0</span>]</option>
+                            <option value="3">Mk-3 Hornet [Ammo: <span id="bomb-3-count">0</span>]</option>
+                            <option value="5">Mk-5 Tomahawk [Ammo: <span id="bomb-5-count">0</span>]</option>
+                            <option value="8">Mk-8 Devastator [Ammo: <span id="bomb-8-count">0</span>]</option>
+                            <option value="13">Mk-13 Armageddon [Ammo: <span id="bomb-13-count">0</span>]</option>
+                        </select>
+                        <button id="btn-logout" class="danger" style="width: 100%; margin-top: 10px;">Disconnect</button>
+                    </div>
+                </div>
+
+                <div class="panel-box">
+                    <h3>Global Intelligence</h3>
+                    <p>Current Pi Approx: <strong id="pi-estimate" class="highlight" style="font-size: 1.2em;">Loading...</strong></p>
+                    <p>Algorithm Tier: <span id="pi-tier-display" class="pink-text">0</span></p>
+                    <br>
+                    <p>Active Theater: <span id="grid-size-display" class="highlight">100x100</span></p>
+                    <p>Impact Craters: <span id="total-placed-display">0</span></p>
+                    <p>Bases Revealed: <span id="total-glowing-display" class="highlight">0</span></p>
+                    <p>Target Coordinates: <strong id="hover-coord" class="gold-text">(0, 0)</strong></p>
+                </div>
+
+                <div class="panel-box">
+                    <h3>War Effort (Global Points)</h3>
+                    <p><strong id="global-points-display">0</strong> / <span id="global-next-goal">10000</span></p>
+                    <div style="width: 100%; background: #111; height: 12px; margin-top: 5px; border-radius: 2px; border: 1px solid #333;">
+                        <div id="global-progress-bar" style="width: 0%; background: var(--neon-pink); height: 100%; transition: width 0.5s;"></div>
+                    </div>
+                </div>
+
+                <div class="panel-box terminal-log" id="log">
+                    > Securing connection to central server...
+                </div>
+            </aside>
+
+            <section class="view-container">
+                
+                <div id="view-universe">
+                    <div class="radar-wrapper">
+                        <canvas id="universe" width="800" height="800"></canvas>
+                    </div>
+                    <p id="controls-hint" style="text-align: center; margin-top: 10px; opacity: 0.7; font-size: 0.9em;">
+                        [ Left-Click to Fire Payload | Click & Drag to Pan Camera | Scroll to Zoom ]
+                    </p>
+                </div>
+
+                <div id="view-market" class="hidden panel-box">
+                    <h2>Munitions Factory</h2>
+                    <p style="margin-bottom: 20px;">Use your Supply Points to requisition heavier payloads.</p>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <button class="buy-btn" data-type="bomb" data-val="2" data-cost="60">Mk-2 Cluster (60 pts)</button>
+                        <button class="buy-btn" data-type="bomb" data-val="3" data-cost="140">Mk-3 Hornet (140 pts)</button>
+                        <button class="buy-btn" data-type="bomb" data-val="5" data-cost="390">Mk-5 Tomahawk (390 pts)</button>
+                        <button class="buy-btn" data-type="bomb" data-val="8" data-cost="1005">Mk-8 Devastator (1005 pts)</button>
+                        <button class="buy-btn" data-type="bomb" data-val="13" data-cost="2650">Mk-13 Armageddon (2650 pts)</button>
+                    </div>
+                </div>
+
+                <div id="view-leaderboard" class="hidden panel-box">
+                    <h2>Top Commanders</h2>
+                    <ul id="leaderboard-list" style="list-style-type: none; margin-top: 20px;"></ul>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

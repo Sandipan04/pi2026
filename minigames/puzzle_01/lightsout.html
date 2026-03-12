@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decryption: SYS.BOOT</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="lightsout.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1 style="color: var(--neon-cyan);">[MISSION] SYS.BOOT CALIBRATION</h1>
+            <nav style="display: flex; gap: 15px; align-items: center;">
+                <div style="color: var(--neon-gold); font-size: 0.9em;">
+                    Supply Points: <strong id="arcade-points">...</strong>
+                </div>
+                <a href="../../arcade.html" class="admin-header-link" style="color: var(--alert-red); border-color: var(--alert-red);">ABORT MISSION</a>
+            </nav>
+        </header>
+
+        <main class="main-content" style="justify-content: center; align-items: center;">
+            <div class="panel-box" style="width: 100%; max-width: 600px; text-align: center;">
+                <h3 class="highlight">Terminal Output</h3>
+                <p style="margin-bottom: 20px;">Isolate the rogue nodes. Toggle all lights to the OFF state to bypass the firewall.</p>
+                <p class="gold-text" style="margin-bottom: 20px;">Bounty: +50 Supply Points</p>
+                
+                <div id="lights-grid" class="lights-grid"></div>
+                
+                <p id="game-status" style="margin-top: 20px; color: var(--neon-pink); font-weight: bold; min-height: 24px;"></p>
+                
+                <button id="btn-replay" class="win-btn hidden" style="margin-top: 10px; font-size: 1rem; padding: 10px 20px;">INITIATE NEW SEQUENCE</button>
+            </div>
+            
+            <div style="margin-top: 30px; width: 100%; border: 1px solid var(--neon-cyan); text-align: left;">
+                <button id="btn-toggle-guide" style="width: 100%; margin: 0; background: rgba(0, 255, 204, 0.1); border: none; padding: 10px; text-align: left; font-weight: bold;">
+                    [+] EXPAND TACTICAL BRIEFING
+                </button>
+                <div id="guide-content" class="hidden" style="padding: 15px; background: rgba(0,0,0,0.8); border-top: 1px dashed var(--neon-cyan); font-size: 0.9em;">
+                    Loading decrypted manual...
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="lightsout.js"></script>
+</body>
+</html>
