@@ -1,6 +1,28 @@
 /* minigames/puzzle_01/lightsout.css */
 
+/* --- TWO COLUMN LAYOUT --- */
+.puzzle-container {
+    display: flex; gap: 20px; align-items: flex-start; max-width: 1100px; width: 100%; margin: 0 auto;
+}
+.game-panel { flex: 1.2; text-align: center; }
+.guide-panel { flex: 1; }
+
+@media (max-width: 768px) {
+    .puzzle-container { flex-direction: column; }
+    .guide-panel { width: 100%; }
+}
+
+/* Markdown Generated Styles for the Guide */
+.guide-content-area { font-size: 0.95em; line-height: 1.5; color: var(--neon-cyan); }
+.guide-content-area h3 { color: var(--neon-gold); margin-bottom: 10px; font-size: 1.1em; border-bottom: 1px dashed #333; padding-bottom: 5px; }
+.guide-content-area ul, .guide-content-area ol { margin-left: 0; padding-left: 25px; margin-bottom: 15px; }
+.guide-content-area li { margin-bottom: 8px; }
+.guide-content-area p { margin-bottom: 15px; }
+.guide-content-area strong { color: var(--neon-pink); }
+
+/* --- THE LIGHTS OUT GRID --- */
 .lights-grid {
+    box-sizing: border-box; /* CRITICAL FIX */
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 8px;
@@ -13,27 +35,16 @@
 }
 
 .light-btn {
+    box-sizing: border-box; /* CRITICAL FIX */
     aspect-ratio: 1 / 1;
     background-color: #050a10;
     border: 1px solid #1a2b3c;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     border-radius: 4px;
+    margin: 0; padding: 0;
 }
 
-.light-btn:hover {
-    background-color: rgba(0, 255, 204, 0.2);
-    border-color: var(--neon-cyan);
-}
-
-.light-btn.is-on {
-    background-color: var(--neon-cyan);
-    border-color: #FFF;
-    box-shadow: 0 0 15px var(--neon-cyan);
-}
-
-.light-btn:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-    pointer-events: none; /* Stops hovering effects when the game is over */
-}
+.light-btn:hover { background-color: rgba(0, 255, 204, 0.2); border-color: var(--neon-cyan); }
+.light-btn.is-on { background-color: var(--neon-cyan); border-color: #FFF; box-shadow: 0 0 15px var(--neon-cyan); }
+.light-btn:disabled { cursor: not-allowed; opacity: 0.5; pointer-events: none; }

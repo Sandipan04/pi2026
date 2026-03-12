@@ -4,7 +4,8 @@
 
 **THE TACTICAL RADAR**
 * **The Grid:** A sprawling battlefield. Your objective is to find "Radar Bases" hidden exclusively at coprime coordinate intersections.
-* **Controls:** * *Desktop:* Left-Click to fire. Click & Drag to pan the camera. Scroll to zoom.
+* **Controls:**
+  * *Desktop:* Left-Click to fire. Click & Drag to pan the camera. Scroll to zoom.
   * *Mobile:* Tap to fire. 2-Finger drag to pan. Pinch to zoom.
 * **The War Effort:** Every base found contributes to the global algorithm tier, permanently pushing the simulation closer to absolute mathematical precision.
 

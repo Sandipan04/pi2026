@@ -1,5 +1,6 @@
 // minigames/puzzle_01/lightsout.js
 import { supabase } from '../../js/supabase.js';
+import { missions } from '../../js/missions.js'; // NEW IMPORT
 
 const GRID_SIZE = 5;
 const gridElement = document.getElementById('lights-grid');
@@ -8,6 +9,7 @@ const statusText = document.getElementById('game-status');
 let currentUserId = null;
 let grid = [];
 let gameActive = true;
+let missionReward = 0; // NEW VARIABLE
 
 // 1. Authenticate Commander
 async function verifyClearance() {
@@ -31,6 +33,38 @@ async function fetchPoints() {
     if (user) {
         document.getElementById('arcade-points').innerText = user.points;
     }
+}
+
+// --- DYNAMIC INTEL & REWARD ---
+function loadMissionIntel() {
+    // 1. Pull dynamic reward
+    const missionData = missions.find(m => m.id === "sys_boot");
+    const bountyDisplay = document.getElementById('bounty-display');
+    if (missionData) {
+        missionReward = missionData.reward;
+        bountyDisplay.innerText = `Bounty: +${missionReward} Supply Points`;
+    }
+
+    // 2. Load the Guide & Wire the Accordion
+    const guideContent = document.getElementById('guide-content');
+    const toggleBtn = document.getElementById('btn-toggle-guide');
+    
+    fetch('lightsout.md').then(res => res.text()).then(text => {
+        guideContent.innerHTML = marked.parse(text);
+    });
+
+    toggleBtn.addEventListener('click', () => {
+        guideContent.classList.toggle('hidden');
+        if (guideContent.classList.contains('hidden')) {
+            toggleBtn.innerText = "[+] EXPAND TACTICAL BRIEFING";
+            toggleBtn.style.background = "rgba(0, 255, 204, 0.1)";
+            toggleBtn.style.color = "var(--neon-cyan)";
+        } else {
+            toggleBtn.innerText = "[-] COLLAPSE TACTICAL BRIEFING";
+            toggleBtn.style.background = "var(--neon-cyan)";
+            toggleBtn.style.color = "#000";
+        }
+    });
 }
 
 // 2. Initialize the Game Board
@@ -140,19 +174,17 @@ async function triggerVictory() {
     const buttons = gridElement.querySelectorAll('.light-btn');
     buttons.forEach(btn => btn.disabled = true);
 
-    statusText.innerText = "> Matrix stabilized. Transmitting decryption key...";
+    statusText.innerText = `> Matrix stabilized. Depositing ${missionReward} Supply Points...`;
     statusText.style.color = "var(--neon-cyan)";
 
     const { data, error } = await supabase.rpc('admin_grant_points', { 
         p_target_id: currentUserId, 
-        p_points: 50 
+        p_points: missionReward 
     });
 
     if (!error) {
-        statusText.innerText = "> Decryption successful. 50 Supply Points deposited.";
+        statusText.innerText = `> Decryption successful. +${missionReward} Points secured.`;
         statusText.style.color = "var(--neon-gold)";
-        
-        // NEW: Refresh the points on the screen and show the replay button!
         fetchPoints(); 
         document.getElementById('btn-replay').classList.remove('hidden');
     } else {
@@ -206,16 +238,10 @@ async function loadMissionBriefing() {
 
 // --- MASTER BOOT SEQUENCE ---
 async function bootSequence() {
-    // 1. Wait for secure login clearance
     await verifyClearance();
-    
-    // 2. Only proceed if clearance was granted
     if (currentUserId) {
-        // 3. Fetch the wallet balance
+        loadMissionIntel(); // Pulls reward & guide!
         await fetchPoints();
-        
-        // 4. Finally, draw the puzzle board
-        loadMissionBriefing();
         initGame();
     }
 }

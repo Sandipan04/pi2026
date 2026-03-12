@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Decryption: SYS.BOOT</title>
+    <title>Decryption: GRID_LOCK</title>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="../../css/style.css">
-    <link rel="stylesheet" href="lightsout.css">
+    <link rel="stylesheet" href="sudoku.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <div class="app-container">
         <header>
-            <h1 style="color: var(--neon-cyan);">[MISSION] SYS.BOOT CALIBRATION</h1>
+            <h1 style="color: var(--neon-cyan);">[MISSION] GRID_LOCK DATA RESTORATION</h1>
             <nav style="display: flex; gap: 15px; align-items: center;">
                 <div style="color: var(--neon-gold); font-size: 0.9em;">
                     Supply Points: <strong id="arcade-points">...</strong>
@@ -26,10 +26,10 @@
             
             <div class="panel-box game-panel">
                 <h3 class="highlight">Terminal Output</h3>
-                <p style="margin-bottom: 10px;">Isolate the rogue nodes. Toggle all lights to the OFF state to bypass the firewall.</p>
+                <p style="margin-bottom: 10px;">Corrupted data packets detected. Restore the matrix to unlock the payload.</p>
                 <p id="bounty-display" class="gold-text" style="margin-bottom: 20px;">Bounty: Calculating...</p>
                 
-                <div id="lights-grid" class="lights-grid"></div>
+                <div id="sudoku-grid" class="sudoku-grid"></div>
                 
                 <p id="game-status" style="margin-top: 20px; color: var(--neon-pink); font-weight: bold; min-height: 24px;"></p>
                 <button id="btn-replay" class="win-btn hidden" style="margin-top: 10px; font-size: 1rem; padding: 10px 20px;">INITIATE NEW SEQUENCE</button>
@@ -49,6 +49,6 @@
         </main>
     </div>
 
-    <script type="module" src="lightsout.js"></script>
+    <script type="module" src="sudoku.js"></script>
 </body>
 </html>
