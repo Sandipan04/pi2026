@@ -19,6 +19,15 @@ export const missions = [
         status: "active" 
     },
     {
+        id: "anomaly_00",
+        title: "???",
+        description: "",
+        reward: 999999, // Bait them with an impossible bounty
+        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // The ultimate trap
+        guide: null, // Crucial: Keeps it out of the Dossier manual
+        status: "active" 
+    },
+    {
         id: "untangle",
         title: "Untangle",
         description: "",
