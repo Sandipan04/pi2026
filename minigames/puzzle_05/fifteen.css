@@ -1,0 +1,74 @@
+/* minigames/puzzle_05/fifteen.css */
+
+/* --- TWO COLUMN LAYOUT --- */
+.puzzle-container {
+    display: flex; gap: 20px; align-items: flex-start; max-width: 1100px; width: 100%; margin: 0 auto;
+}
+.game-panel { flex: 1.2; text-align: center; }
+.guide-panel { flex: 1; }
+
+@media (max-width: 768px) {
+    .puzzle-container { flex-direction: column; }
+    .guide-panel { width: 100%; }
+}
+
+/* --- Markdown Guide Styles --- */
+.guide-content-area { font-size: 0.95em; line-height: 1.5; color: var(--neon-cyan); }
+.guide-content-area h3 { color: var(--neon-gold); margin-bottom: 10px; font-size: 1.1em; border-bottom: 1px dashed #333; padding-bottom: 5px; }
+.guide-content-area ul, .guide-content-area ol { margin-left: 0; padding-left: 25px; margin-bottom: 15px; }
+.guide-content-area li { margin-bottom: 8px; }
+.guide-content-area p { margin-bottom: 15px; }
+.guide-content-area strong { color: var(--neon-pink); }
+
+/* --- FIFTEEN GRID --- */
+.fifteen-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+    gap: 5px;
+    background: #02040a;
+    padding: 10px;
+    border: 2px solid var(--neon-cyan);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
+}
+
+.fifteen-tile {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--neon-cyan);
+    background: rgba(0, 20, 30, 0.8);
+    border: 1px solid var(--neon-cyan);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    border-radius: 4px;
+}
+
+.fifteen-tile:hover {
+    background: rgba(0, 255, 204, 0.2);
+    box-shadow: inset 0 0 10px rgba(0, 255, 204, 0.5);
+}
+
+.fifteen-tile:active {
+    transform: scale(0.95);
+}
+
+/* The Empty Space */
+.fifteen-empty {
+    background: transparent;
+    border: 1px dashed #333;
+    cursor: default;
+    color: transparent;
+}
+.fifteen-empty:hover {
+    background: transparent;
+    box-shadow: none;
+}

@@ -44,5 +44,14 @@ export const missions = [
         url: "minigames/puzzle_04/minesweeper.html",
         guide: "minigames/puzzle_04/minesweeper.md", 
         status: "active"
+    },
+    {
+        id: "fifteen",
+        title: "Fifteen",
+        description: "",
+        reward: 100, 
+        url: "minigames/puzzle_05/fifteen.html",
+        guide: "minigames/puzzle_05/fifteen.md", 
+        status: "active"
     }
 ];
