@@ -1,0 +1,75 @@
+/* minigames/puzzle_06/map.css */
+
+/* --- TWO COLUMN LAYOUT --- */
+.puzzle-container {
+    display: flex; gap: 20px; align-items: flex-start; max-width: 1100px; width: 100%; margin: 0 auto;
+}
+.game-panel { flex: 1.2; text-align: center; }
+.guide-panel { flex: 1; }
+
+@media (max-width: 768px) {
+    .puzzle-container { flex-direction: column; }
+    .guide-panel { width: 100%; }
+}
+
+/* --- Markdown Guide Styles --- */
+.guide-content-area { font-size: 0.95em; line-height: 1.5; color: var(--neon-cyan); }
+.guide-content-area h3 { color: var(--neon-gold); margin-bottom: 10px; font-size: 1.1em; border-bottom: 1px dashed #333; padding-bottom: 5px; }
+.guide-content-area ul, .guide-content-area ol { margin-left: 0; padding-left: 25px; margin-bottom: 15px; }
+.guide-content-area li { margin-bottom: 8px; }
+.guide-content-area p { margin-bottom: 15px; }
+.guide-content-area strong { color: var(--neon-pink); }
+
+/* --- MAP CANVAS & PALETTE --- */
+.map-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+#map-canvas {
+    background: #02040a;
+    border: 2px solid var(--neon-cyan);
+    border-radius: 4px;
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+    cursor: crosshair;
+    touch-action: none;
+    max-width: 100%;
+    height: auto;
+    image-rendering: pixelated; 
+}
+
+.palette-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.color-btn {
+    box-sizing: border-box; /* Keeps the button from physically growing when the border appears */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid transparent; /* Invisible border waiting to be revealed */
+    /* cursor: pointer; */
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s; 
+}
+
+.color-btn:hover {
+    transform: scale(1.1); 
+    border-color: #FFF; /* White outline on hover */
+}
+
+.color-btn.selected {
+    transform: scale(1.35); 
+    border-color: #FFF; /* Solid white outline when actively selected */
+}
+
+/* The 4 Tactical Frequencies (High Contrast Palette) */
+.color-1 { background: #0066FF; box-shadow: 0 0 10px #0066FF; } /* Deep Blue */
+.color-2 { background: #FF00FF; box-shadow: 0 0 10px #FF00FF; } /* Neon Pink */
+.color-3 { background: #FFD700; box-shadow: 0 0 10px #FFD700; } /* Gold */
+.color-4 { background: #00FF33; box-shadow: 0 0 10px #00FF33; } /* Neon Green */

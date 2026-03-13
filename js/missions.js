@@ -53,5 +53,14 @@ export const missions = [
         url: "minigames/puzzle_05/fifteen.html",
         guide: "minigames/puzzle_05/fifteen.md", 
         status: "active"
+    },
+    {
+        id: "map_color",
+        title: "map",
+        description: "",
+        reward: 50, 
+        url: "minigames/puzzle_06/map.html",
+        guide: "minigames/puzzle_06/map.md", 
+        status: "active"
     }
 ];
