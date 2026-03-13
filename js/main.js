@@ -3,7 +3,7 @@ import { supabase } from './supabase.js';
 import { drawGrid, canvas, camera, getGridCoords } from './grid.js';
 import { setLoggedInState, setLoggedOutState, isLoggedIn } from './auth.js';
 import { fetchLeaderboards, processPurchase, cheatPoints } from './economy.js';
-import { calculatePi } from './pi_calculator.js';
+import { calculatePi, ERROR_THRESHOLD_STEP } from './pi_calculator.js'; // <-- CRITICAL FIX: Imported the Step constant
 
 // DOM Elements
 const logDiv = document.getElementById('log');
@@ -135,11 +135,14 @@ async function fetchPublicData() {
         updateUI('total-placed-display', stats.total_explored);
         updateUI('total-glowing-display', stats.total_coprime);
 
-        // Fill the visual Progress Bar safely
+        // --- CRITICAL FIX: The Progress Bar Math ---
         const progressBar = document.getElementById('global-progress-bar');
         if (progressBar) {
-            let pct = Math.min((stats.global_points / piData.nextGoal) * 100, 100);
-            progressBar.style.width = `${pct}%`;
+            // Modulo finds exactly how many points into the current tier the server is
+            const pointsInCurrentTier = stats.global_points % ERROR_THRESHOLD_STEP;
+            const progressPercentage = (pointsInCurrentTier / ERROR_THRESHOLD_STEP) * 100;
+            
+            progressBar.style.width = `${progressPercentage}%`;
         }
 
         // CRITICAL: Load the chunk data AFTER UI updates so a UI error doesn't stop this

@@ -13,12 +13,12 @@
         <header>
             <h1>WW 3.14159 // TACTICAL COMMAND</h1>
             <nav id="nav-bar" class="hidden">
-                <button id="nav-universe">Radar Map</button>
-                <button id="nav-market">Munitions Hub</button>
-                <button id="nav-minigames" style="color: var(--neon-pink); border-color: var(--neon-pink);">Crypto Terminal</button>
-                <button id="nav-leaderboard">Commanders</button>
+                <button id="nav-universe">Warzone</button>
+                <button id="nav-market">Nuke Shop</button>
+                <button id="nav-minigames" style="color: var(--neon-pink); border-color: var(--neon-pink);">Arcade</button>
+                <button id="nav-leaderboard">Leaderboard</button>
                 
-                <button onclick="window.location.href='index.html'" style="color: var(--neon-gold); border-color: var(--neon-gold);">Field Manual</button>
+                <button onclick="window.location.href='index.html'" style="color: var(--neon-gold); border-color: var(--neon-gold);">Home</button>
             </nav>
         </header>
 
@@ -27,13 +27,13 @@
             <aside class="hud-panel">
                 
                 <div id="auth-section" class="panel-box">
-                    <h3>Identify Commander</h3>
-                    <input type="text" id="display-name" placeholder="Callsign (Signup Only)">
+                    <h3>Login/Sign-up</h3>
+                    <input type="text" id="display-name" placeholder="Username (Signup Only)">
                     <input type="email" id="email" placeholder="Secure Email">
-                    <input type="password" id="password" placeholder="Clearance Code">
+                    <input type="password" id="password" placeholder="Password">
                     <div style="display: flex; gap: 5px;">
                         <button id="btn-login" style="flex: 1;">Login</button>
-                        <button id="btn-signup" style="flex: 1;">Enlist</button>
+                        <button id="btn-signup" style="flex: 1;">New User</button>
                     </div>
                 </div>
 
@@ -68,8 +68,8 @@
 
                 <div class="panel-box">
                     <h3>War Effort (Global Points)</h3>
-                    <p><strong id="global-points-display">0</strong> / <span id="global-next-goal">10000</span></p>
-                    <div style="width: 100%; background: #111; height: 12px; margin-top: 5px; border-radius: 2px; border: 1px solid #333;">
+                        <p><strong id="global-points-display">0</strong> / <span id="global-next-goal">100000</span></p>
+                        <div style="width: 100%; background: #111; height: 12px; margin-top: 5px; border-radius: 2px; border: 1px solid #333;">
                         <div id="global-progress-bar" style="width: 0%; background: var(--neon-pink); height: 100%; transition: width 0.5s;"></div>
                     </div>
                 </div>

@@ -8,12 +8,12 @@ const tableBody = document.getElementById('player-table-body');
 async function bootAdminPanel() {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
-        window.location.href = 'index.html'; 
+        window.location.href = 'radar.html'; 
         return;
     }
 
-    const { data: user } = await supabase.from('users').select('is_admin').eq('id', session.user.id).single();
-    if (!user || !user.is_admin) {
+    const { data: user, error } = await supabase.from('users').select('is_admin').eq('id', session.user.id).single();
+    if (error || !user || !user.is_admin) {
         accessDenied.style.display = 'block';
         return;
     }
@@ -28,24 +28,24 @@ async function loadPlayers() {
     const { data: players, error } = await supabase.rpc('admin_get_all_users');
     
     if (error) {
-        tableBody.innerHTML = `<tr><td colspan='5'>Error: ${error.message}</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan='5' style="color: var(--alert-red);">Error: ${error.message}</td></tr>`;
         return;
     }
 
     tableBody.innerHTML = '';
     
     players.forEach(p => {
-        // Format the arsenal into a clean string so it doesn't take up too much table space
-        const arsenal = `[${p.bomb_2}, ${p.bomb_3}, ${p.bomb_5}, ${p.bomb_8}, ${p.bomb_13}]`;
+        // Fallbacks added just in case a user hasn't bought a bomb yet
+        const arsenal = `[${p.bomb_2 || 0}, ${p.bomb_3 || 0}, ${p.bomb_5 || 0}, ${p.bomb_8 || 0}, ${p.bomb_13 || 0}]`;
         
         const row = document.createElement('tr');
         row.innerHTML = `
             <td><strong>${p.username}</strong></td>
-            <td>${p.coprimes_found}</td>
+            <td>${p.coprimes_found || 0}</td>
             <td style="font-family: monospace; color: #FFD700;">${arsenal}</td>
             <td>${p.points}</td>
             <td>
-                <input type="number" id="amt-${p.id}" value="1000">
+                <input type="number" id="amt-${p.id}" value="1000" style="width: 80px;">
                 <button class="action-btn" onclick="grantIndividual('${p.id}')">Grant Points</button>
             </td>
         `;
@@ -53,15 +53,27 @@ async function loadPlayers() {
     });
 }
 
+// CRITICAL FIX: Safer error handling and parameter checking
 window.grantIndividual = async (userId) => {
-    const amt = parseInt(document.getElementById(`amt-${userId}`).value);
-    const { data, error } = await supabase.rpc('admin_grant_points', { p_target_id: userId, p_points: amt });
+    const amtInput = document.getElementById(`amt-${userId}`);
+    if (!amtInput) return;
     
-    if (data === true) {
+    const amt = parseInt(amtInput.value);
+    
+    console.log(`[Admin] Initiating transfer of ${amt} points to ${userId}...`);
+
+    const { data, error } = await supabase.rpc('admin_grant_points', { 
+        p_target_id: userId, 
+        p_points: amt 
+    });
+    
+    // Check for the error directly
+    if (error) {
+        console.error("RPC Execution Error:", error);
+        alert(`Action failed: ${error.message}\n\n(Check the browser console for exact details)`);
+    } else {
         alert("Command confirmed: Points granted successfully!");
         loadPlayers(); 
-    } else {
-        alert("Action failed or unauthorized.");
     }
 };
 
@@ -70,8 +82,10 @@ document.getElementById('btn-global-grant').addEventListener('click', async () =
     const confirmAction = confirm(`Are you absolutely sure you want to drop ${amt} supply points to EVERY commander?`);
     
     if (confirmAction) {
-        const { data } = await supabase.rpc('admin_grant_global_points', { p_points: amt });
-        if (data === true) {
+        const { data, error } = await supabase.rpc('admin_grant_global_points', { p_points: amt });
+        if (error) {
+            alert(`Action failed: ${error.message}`);
+        } else {
             alert("Global supply drop successful!");
             loadPlayers();
         }

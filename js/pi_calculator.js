@@ -1,19 +1,18 @@
 // js/pi_calculator.js
 
+// The global milestone requirement. Change this one number to balance the whole game!
+export const ERROR_THRESHOLD_STEP = 100000;
+
 export function calculatePi(totalExplored, totalCoprime, globalPoints, adminTierOverride = 0) {
-    if (totalCoprime === 0 || totalExplored === 0) return { pi: "Calibrating...", tier: 0, nextGoal: 10000 };
+    if (totalCoprime === 0 || totalExplored === 0) return { pi: "Calibrating...", tier: 0, nextGoal: ERROR_THRESHOLD_STEP };
 
-    // 1. Determine Tier based on global points OR the admin override
-    let tier = adminTierOverride;
-    let nextGoal = 10000;
-
-    if (tier === 0) {
-        if (globalPoints >= 50000) { tier = 3; nextGoal = 100000; }
-        else if (globalPoints >= 25000) { tier = 2; nextGoal = 50000; }
-        else if (globalPoints >= 10000) { tier = 1; nextGoal = 25000; }
-    } else {
-        nextGoal = (tier === 1) ? 25000 : (tier === 2) ? 50000 : 100000; 
-    }
+    // 1. Determine Tier dynamically based on global points OR the admin override
+    let tier = adminTierOverride > 0 
+        ? adminTierOverride 
+        : Math.floor(globalPoints / ERROR_THRESHOLD_STEP);
+        
+    // Calculate the next milestone dynamically (e.g., if Tier is 2, next goal is 300,000)
+    let nextGoal = (tier + 1) * ERROR_THRESHOLD_STEP;
 
     // 2. Apply Error Term Corrections R(n)
     // Because totalExplored is an Area (n^2), we take the square root to find the approximate side length (n)
@@ -32,6 +31,8 @@ export function calculatePi(totalExplored, totalCoprime, globalPoints, adminTier
          // Third order correction: O(sqrt(n))
          errorTerm += Math.sqrt(nApprox);
     }
+    // Note: If the server reaches Tier 4 (400,000 pts), the error term currently 
+    // caps at the 3rd order correction, which fits the mathematical limits of this specific asymptotic expansion!
 
     // Subtract the error term from the denominator
     const adjustedDenominator = totalCoprime - errorTerm;

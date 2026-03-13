@@ -25,19 +25,23 @@
 <body>
     <div class="app-container">
         <header style="border-bottom-color: var(--neon-pink);">
-            <h1 style="color: var(--neon-pink); text-shadow: 0 0 5px var(--neon-pink);">[CLASSIFIED] DECRYPTION TERMINAL</h1>
+            <h1 style="color: var(--neon-pink); text-shadow: 0 0 5px var(--neon-pink);">ARCADE</h1>
             <nav>
                 <div style="color: var(--neon-gold); margin-right: 20px; align-self: center;">
                     Supply Points: <span id="arcade-points">Loading...</span>
                 </div>
-                <a href="radar.html" class="play-btn" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">RETURN TO RADAR</a>
+                <a href="radar.html" class="play-btn" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">Return to Warzone</a>
             </nav>
         </header>
 
         <main class="main-content" style="flex-direction: column; max-width: 1200px;">
             <div class="panel-box" style="border-color: var(--neon-pink);">
-                <h2 style="color: var(--neon-pink);">Active Intercepts</h2>
-                <p>Select a transmission to decrypt. Successful logic execution will be rewarded by High Command.</p>
+                <h2 style="color: var(--neon-pink);">Puzzle Catalogue</h2>
+                <p>Ideas for many of these puzzles have been taken from <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/">Simon Tatham's puzzle page.</a></p>
+                <p>Complete puzzles of your choice to earn supply points which can be used in the shop.</p>
+                <p>In case of any confusion, clarification, discrepancy, suggestion please catch one of these:</p>
+                <p>Aaditya Vicram Saraf ( <a href="mailto:aadityavicram.saraf@niser.ac.in">aadityavicram.saraf@niser.ac.in</a> )</p>
+                <p>Sandipan Samanta ( <a href="mailto:sandipan.samanta@niser.ac.in">sandipan.samanta@niser.ac.in</a> )</p>
                 
                 <div id="mission-grid" class="mission-grid">
                     <p style="color: var(--neon-cyan);">Scanning for active frequencies...</p>
@@ -82,7 +86,7 @@
                             <p style="font-size: 0.9em; opacity: 0.8; margin-bottom: 10px;">${mission.description}</p>
                             <p class="reward">Reward: +${mission.reward} Pts</p>
                         </div>
-                        <a href="${mission.url}" class="play-btn">INITIATE DECRYPTION</a>
+                        <a href="${mission.url}" class="play-btn">ATTEMPT PUZZLE</a>
                     `;
                 } 
                 else if (mission.status === "locked") {

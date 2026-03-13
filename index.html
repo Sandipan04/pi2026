@@ -1,146 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WW 3.14159 // INTELLIGENCE DOSSIER</title>
-    <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        /* Smooth scrolling for anchor links */
-        html { scroll-behavior: smooth; }
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>WW 3.14159</title>
+   <link rel="icon" href="data:,">
+   <link rel="stylesheet" href="css/style.css">
+   <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+   <style>
+       /* Smooth scrolling for anchor links */
+       html { scroll-behavior: smooth; }
 
-        .hero { text-align: center; padding: 50px 20px; border-bottom: 2px dashed var(--neon-cyan); margin-bottom: 30px; }
-        .hero h1 { font-size: 3rem; color: var(--neon-pink); text-shadow: 0 0 15px var(--neon-pink); }
-        .hero-btn { display: inline-block; margin-top: 20px; font-size: 1.5rem; padding: 15px 40px; background: var(--neon-cyan); color: #000; text-decoration: none; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
-        .hero-btn:hover { box-shadow: 0 0 20px var(--neon-cyan); transform: scale(1.05); }
-        
-        /* --- NEW TWO-COLUMN LAYOUT --- */
-        .dossier-wrapper {
-            display: flex;
-            gap: 30px;
-            align-items: flex-start; /* Required for sticky positioning to work */
-            margin-bottom: 50px;
-        }
 
-        /* --- THE STICKY SIDEBAR --- */
-        .sidebar {
-            flex: 0 0 280px;
-            position: sticky;
-            top: 20px; /* How far from the top of the screen it sticks */
-            background: rgba(0, 20, 30, 0.8);
-            border: 1px solid var(--neon-cyan);
-            padding: 20px;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
-        }
+       .hero { text-align: center; padding: 50px 20px; border-bottom: 2px dashed var(--neon-cyan); margin-bottom: 30px; }
+       .hero h1 { font-size: 3rem; color: var(--neon-pink); text-shadow: 0 0 15px var(--neon-pink); }
+       .hero-btn { display: inline-block; margin-top: 20px; font-size: 1.5rem; padding: 15px 40px; background: var(--neon-cyan); color: #000; text-decoration: none; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+       .hero-btn:hover { box-shadow: 0 0 20px var(--neon-cyan); transform: scale(1.05); }
+      
+       /* --- NEW TWO-COLUMN LAYOUT --- */
+       .dossier-wrapper {
+           display: flex;
+           gap: 30px;
+           align-items: flex-start; /* Required for sticky positioning to work */
+           margin-bottom: 50px;
+       }
 
-        .sidebar h3 { color: var(--neon-cyan); border-bottom: 1px dashed var(--neon-cyan); padding-bottom: 10px; margin-bottom: 15px; }
-        
-        .sidebar a {
+
+       /* --- THE STICKY SIDEBAR --- */
+       .sidebar {
+           flex: 0 0 280px;
+           position: sticky;
+           top: 20px; /* How far from the top of the screen it sticks */
+           background: rgba(0, 20, 30, 0.8);
+           border: 1px solid var(--neon-cyan);
+           padding: 20px;
+           box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
+       }
+
+
+       .sidebar h3 { color: var(--neon-cyan); border-bottom: 1px dashed var(--neon-cyan); padding-bottom: 10px; margin-bottom: 15px; }
+      
+       .sidebar a {
+           display: block;
+           color: var(--neon-gold);
+           text-decoration: none;
+           margin-bottom: 12px;
+           font-size: 0.95em;
+           transition: 0.2s;
+           line-height: 1.3;
+       }
+      
+       .sidebar a:hover {
+           color: var(--neon-pink);
+           padding-left: 8px; /* Cool hover indent effect */
+       }
+
+
+       /* --- THE MAIN CONTENT --- */
+       .dossier-content {
+           flex: 1;
+           min-width: 0;
+       }
+
+       /* --- ADDED EDGE PADDING TO THE APP CONTAINER --- */
+        .app-container {
+            max-width: 1200px; 
+            margin: 0 auto; 
             display: block;
-            color: var(--neon-gold);
-            text-decoration: none;
-            margin-bottom: 12px;
-            font-size: 0.95em;
-            transition: 0.2s;
-            line-height: 1.3;
-        }
-        
-        .sidebar a:hover {
-            color: var(--neon-pink);
-            padding-left: 8px; /* Cool hover indent effect */
+            padding: 0 15px; /* <--- NEW: Forces 15px of breathing room on mobile screens */
+            box-sizing: border-box;
         }
 
-        /* --- THE MAIN CONTENT --- */
-        .dossier-content {
-            flex: 1;
-            min-width: 0;
+        /* --- UPDATED GUIDE SECTION --- */
+        .guide-section { 
+            background: rgba(0, 20, 30, 0.5); 
+            border: 1px solid #333; 
+            padding: 25px; /* Increased internal padding */
+            margin-bottom: 30px; 
+            box-sizing: border-box; /* <--- CRITICAL: Stops padding from pushing the box off-screen */
+            width: 100%;
+            overflow-x: auto; /* <--- CRITICAL: Allows horizontal scrolling if a LaTeX equation is too long */
         }
+      
+       /* Markdown generated styles */
+       .guide-section h3 { color: var(--neon-gold); margin-bottom: 10px; border-bottom: 1px dashed #333; padding-bottom: 5px; }
+       .guide-section ul { margin-left: 20px; margin-bottom: 10px; }
+       .guide-section p { margin-bottom: 10px; }
+       .guide-section strong { color: var(--neon-cyan); }
 
-        .guide-section { background: rgba(0, 20, 30, 0.5); border: 1px solid #333; padding: 20px; margin-bottom: 30px; }
-        
-        /* Markdown generated styles */
-        .guide-section h3 { color: var(--neon-gold); margin-bottom: 10px; border-bottom: 1px dashed #333; padding-bottom: 5px; }
-        .guide-section ul { margin-left: 20px; margin-bottom: 10px; }
-        .guide-section p { margin-bottom: 10px; }
-        .guide-section strong { color: var(--neon-cyan); }
 
-        /* Mobile layout override */
-        @media (max-width: 768px) {
-            .dossier-wrapper { flex-direction: column; }
-            .sidebar { position: static; width: 100%; flex: none; margin-bottom: 20px; }
-        }
-    </style>
+       /* Mobile layout override */
+       @media (max-width: 768px) {
+           .dossier-wrapper { flex-direction: column; }
+           .sidebar { position: static; width: 100%; flex: none; margin-bottom: 20px; }
+       }
+   </style>
 </head>
 <body>
-    <div class="app-container" style="max-width: 1200px; margin: 0 auto; display: block;">
-        
-        <section class="hero">
-            <h1>WORLD WAR 3.14159</h1>
-            <p style="font-size: 1.2rem; margin-top: 10px; color: var(--neon-cyan);">Global tactical command and cryptographic warfare.</p>
-            <a href="radar.html" class="hero-btn">INITIATE CONNECTION</a>
-        </section>
+   <div class="app-container" style="max-width: 1200px; margin: 0 auto; display: block;">
+      
+       <section class="hero">
+           <h1>WORLD WAR 3.14159</h1>
+           <p style="font-size: 1.2rem; margin-top: 10px; color: var(--neon-cyan);">Strategic Warfare for Approximating $\pi$.</p>
+           <a href="radar.html" class="hero-btn"> INITIATE MISSION </a>
+       </section>
 
-        <main class="dossier-wrapper">
-            
-            <aside class="sidebar" id="toc-sidebar">
-                <h3>DIRECTORY INDEX</h3>
-                <a href="#global-manual-container">> Global Command Manual</a>
-                </aside>
 
-            <section class="dossier-content">
-                <h2 style="color: var(--neon-pink); margin-bottom: 20px;">[ INTELLIGENCE DOSSIER ]</h2>
-                <p style="margin-bottom: 30px;">Review the tactical briefings below before engaging enemy protocols.</p>
-                
-                <div id="global-manual-container" class="guide-section" style="border-color: var(--neon-cyan);">
-                    <p style="color: var(--neon-cyan);">Decrypting Global Command Manual...</p>
-                </div>
+       <main class="dossier-wrapper">
+          
+           <aside class="sidebar" id="toc-sidebar">
+               <h3>DIRECTORY</h3>
+               <a href="#global-manual-container">> Manual</a>
+               
+               <div style="margin-top: 20px;">
+                   <a href="#puzzles-section" style="color: var(--neon-gold); font-weight: bold; margin-bottom: 10px;">> Cryptographic Puzzles</a>
+                   
+                   <div id="sidebar-puzzles-list" style="padding-left: 15px; border-left: 1px dashed var(--neon-cyan); margin-left: 5px;">
+                       </div>
+               </div>
+           </aside>
 
-                <div id="guides-container">
-                    </div>
-            </section>
-            
-        </main>
 
-        <footer style="padding: 30px 20px; text-align: center; border-top: 1px dashed var(--neon-pink); background: rgba(0, 0, 0, 0.5);">
-            <p style="color: var(--alert-red); font-weight: bold; margin-bottom: 10px; letter-spacing: 1px;">[ TRANSMISSION STATUS: UNDER ACTIVE CONSTRUCTION ]</p>
-            <p style="font-size: 0.9em; max-width: 600px; margin: 0 auto 30px auto; opacity: 0.8;">
-                The command center is in an active state of development. However, tactical drops are fully authorized. Expect new cryptographic arcade puzzles, expanded arsenals, and continuous UI upgrades in future transmissions.
-            </p>
-            
-            <h4 style="color: var(--neon-pink); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px;">Architects // Creators</h4>
-            <p style="font-size: 1.1em;">
-                <a href="https://sandipan04.github.io/webpage/" target="_blank" style="color: var(--neon-cyan); text-decoration: none; font-weight: bold;">Sandipan Samanta</a> 
-                <span style="color: #555; margin: 0 10px;"> // </span> 
-                <a href="https://sites.google.com/view/aadityavicramsaraf/" target="_blank" style="color: var(--neon-cyan); text-decoration: none; font-weight: bold;">Aaditya Vicram saraf</a>
-            </p>
-        </footer>
+           <section class="dossier-content">
+               <h2 style="color: var(--neon-pink); margin-bottom: 20px;">Mission Details</h2>
+               <p style="margin-bottom: 30px;"> The following manual will help you in contributing to our mission to approximate the value of $\pi$.</p>
+              
+               <div id="global-manual-container" class="guide-section" style="border-color: var(--neon-cyan);">
+                   <p style="color: var(--neon-cyan);">Decrypting Mission Data...</p>
+               </div>
 
-    </div>
+               <h2 id="puzzles-section" style="color: var(--neon-pink); margin-top: 50px; margin-bottom: 20px; border-bottom: 1px solid var(--neon-cyan); padding-bottom: 10px; font-size: 1.8rem;">
+                   ARCADE PUZZLES
+               </h2>
 
-    <script type="module">
-        import { missions } from './js/missions.js';
+               <div id="guides-container">
+                   </div>
+           </section>
+          
+       </main>
 
-        const sidebar = document.getElementById('toc-sidebar');
 
-        // 1. Fetch the Global Manual
-        async function loadGlobalManual() {
-            const container = document.getElementById('global-manual-container');
-            try {
-                const response = await fetch('manual.md');
-                if (response.ok) {
-                    const text = await response.text();
-                    container.innerHTML = marked.parse(text);
-                } else {
-                    container.style.display = 'none';
-                }
-            } catch (err) {
-                console.error("Failed to load global manual.");
-            }
-        }
+       <footer style="padding: 30px 20px; text-align: center; border-top: 1px dashed var(--neon-pink); background: rgba(0, 0, 0, 0.5);">
+           <p style="color: var(--alert-red); font-weight: bold; margin-bottom: 10px; letter-spacing: 1px;">[ MISSION STATUS: UNDER ACTIVE CONSTRUCTION ]</p>
+           <p style="font-size: 0.9em; max-width: 600px; margin: 0 auto 30px auto; opacity: 0.8;">
+               The game is in an active state of development. However, tactical drops are fully authorized. Expect new cryptographic arcade puzzles, expanded arsenals, and continuous UI upgrades in future.
+           </p>
+          
+           <h4 style="color: var(--neon-pink); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px;">CREDITS</h4>
+           <p style="font-size: 1.1em;">
+               <a href="https://sandipan04.github.io/webpage/" target="_blank" style="color: var(--neon-cyan); text-decoration: none; font-weight: bold;">Sandipan Samanta</a>
+               <span style="color: #555; margin: 0 10px;"> // </span>
+               <a href="https://sites.google.com/view/aadityavicramsaraf/" target="_blank" style="color: var(--neon-cyan); text-decoration: none; font-weight: bold;">Aaditya Vicram Saraf</a>
+           </p>
+       </footer>
 
-        // 2. Fetch the Minigame Guides & Build the Sidebar Directory
+
+   </div>
+
+
+   <script type="module">
+       import { missions } from './js/missions.js';
+
+
+       const puzzleSidebarList = document.getElementById('sidebar-puzzles-list');
+
+
+       // 1. Fetch the Global Manual
+       async function loadGlobalManual() {
+           const container = document.getElementById('global-manual-container');
+           try {
+               const response = await fetch('manual.md');
+               if (response.ok) {
+                   const text = await response.text();
+                   container.innerHTML = marked.parse(text);
+               } else {
+                   container.style.display = 'none';
+               }
+           } catch (err) {
+               console.error("Failed to load global manual.");
+           }
+       }
+
+
+       // 2. Fetch the Minigame Guides & Build the Sidebar Directory
         async function loadArcadeGuides() {
             const container = document.getElementById('guides-container');
             container.innerHTML = ''; 
@@ -156,28 +207,36 @@
                             const guideDiv = document.createElement('div');
                             guideDiv.className = 'guide-section';
                             
-                            // NEW: Give the block an ID so the sidebar can link to it
                             const sectionId = `guide-${mission.id}`;
                             guideDiv.id = sectionId; 
                             
                             guideDiv.innerHTML = marked.parse(markdownText);
                             container.appendChild(guideDiv);
 
-                            // NEW: Create the Sidebar Link
+                            // Create the Sidebar Link inside the tree branch
                             const link = document.createElement('a');
                             link.href = `#${sectionId}`;
-                            link.innerText = `> ${mission.title}`;
-                            sidebar.appendChild(link);
+                            link.innerText = `- ${mission.title}`; // Using |_ gives it a cool retro folder-tree look!
+                            puzzleSidebarList.appendChild(link);
+                        } else {
+                            console.warn(`Could not load guide for ${mission.id}`);
                         }
                     } catch (err) {
                         console.error("Error loading guide:", err);
                     }
                 }
             }
+            
+            // NEW: After all guides are loaded into the DOM, tell MathJax to render the LaTeX!
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
         }
 
-        loadGlobalManual();
-        loadArcadeGuides();
-    </script>
+
+       loadGlobalManual();
+       loadArcadeGuides();
+   </script>
 </body>
 </html>
+
