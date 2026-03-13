@@ -56,11 +56,20 @@ export const missions = [
     },
     {
         id: "map_color",
-        title: "map",
+        title: "Map",
         description: "",
         reward: 50, 
         url: "minigames/puzzle_06/map.html",
         guide: "minigames/puzzle_06/map.md", 
+        status: "active"
+    },
+    {
+        id: "unruly",
+        title: "Unruly",
+        description: "",
+        reward: 200, 
+        url: "minigames/puzzle_07/unruly.html",
+        guide: "minigames/puzzle_07/unruly.md", 
         status: "active"
     }
 ];

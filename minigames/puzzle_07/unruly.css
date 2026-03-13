@@ -1,0 +1,86 @@
+/* minigames/puzzle_07/unruly.css */
+
+/* --- TWO COLUMN LAYOUT --- */
+.puzzle-container {
+    display: flex; gap: 20px; align-items: flex-start; max-width: 1100px; width: 100%; margin: 0 auto;
+}
+.game-panel { flex: 1.2; text-align: center; }
+.guide-panel { flex: 1; }
+
+@media (max-width: 768px) {
+    .puzzle-container { flex-direction: column; }
+    .guide-panel { width: 100%; }
+}
+
+/* --- Markdown Guide Styles --- */
+.guide-content-area { font-size: 0.95em; line-height: 1.5; color: var(--neon-cyan); }
+.guide-content-area h3 { color: var(--neon-gold); margin-bottom: 10px; font-size: 1.1em; border-bottom: 1px dashed #333; padding-bottom: 5px; }
+.guide-content-area ul, .guide-content-area ol { margin-left: 0; padding-left: 25px; margin-bottom: 15px; }
+.guide-content-area li { margin-bottom: 8px; }
+.guide-content-area p { margin-bottom: 15px; }
+.guide-content-area strong { color: var(--neon-pink); }
+
+/* --- UNRULY GRID --- */
+.unruly-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    gap: 4px;
+    background: #02040a;
+    padding: 10px;
+    border: 2px solid var(--neon-cyan);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
+}
+
+.unruly-cell {
+    aspect-ratio: 1 / 1;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.1s, box-shadow 0.1s, transform 0.1s;
+    background: rgba(255, 255, 255, 0.05); /* Empty state */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* User Interactable States (Now Solid & Glowing) */
+.unruly-cell:hover:not(.locked) {
+    transform: scale(0.95);
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.unruly-cell.state-1 { 
+    background: #00FF33; /* Solid Matrix Green */
+    border-color: #00FF33; 
+    box-shadow: 0 0 15px #00FF33;
+}
+
+.unruly-cell.state-2 { 
+    background: #9D00FF; /* Solid Deep Neon Purple */
+    border-color: #9D00FF; 
+    box-shadow: 0 0 15px #9D00FF;
+}
+
+/* Locked/Static Clue States (Now Translucent & Hollow) */
+.unruly-cell.locked { 
+    cursor: default; 
+}
+
+.unruly-cell.locked.state-1 { 
+    background: rgba(0, 255, 51, 0.8); /* Matrix Green at 0.8 Alpha */
+    border-color: #00FF33; 
+    box-shadow: inset 0 0 10px rgba(0, 255, 51, 0.6);
+}
+
+.unruly-cell.locked.state-2 { 
+    background: rgba(157, 0, 255, 0.8); /* Deep Neon Purple at 0.8 Alpha */
+    border-color: #9D00FF; 
+    box-shadow: inset 0 0 10px rgba(157, 0, 255, 0.6);
+}
+
+/* Error State (Flashes red if they put 3 in a row) */
+.unruly-cell.error {
+    border-color: var(--alert-red) !important;
+    box-shadow: 0 0 15px var(--alert-red) inset !important;
+}
