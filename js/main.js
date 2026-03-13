@@ -533,11 +533,35 @@ document.querySelectorAll('.buy-btn').forEach(btn => {
     btn.addEventListener('click', async (e) => {
         const type = e.target.getAttribute('data-type');
         const val = e.target.getAttribute('data-qty') || e.target.getAttribute('data-val');
-        const cost = parseInt(e.target.getAttribute('data-cost'));
+        const unitCost = parseInt(e.target.getAttribute('data-unitcost'));
+
+        let quantity = 1;
+        let totalCost = unitCost;
+
+        // If they are buying a bomb, read the dynamic quantity input
+        if (type === 'bomb') {
+            const inputEl = document.getElementById(`qty-bomb-${val}`);
+            if (inputEl) {
+                quantity = Math.max(1, parseInt(inputEl.value) || 1); // Prevent 0 or negative buys
+                totalCost = unitCost * quantity;
+            }
+        }
 
         const { data: user } = await supabase.from('users').select('*').eq('id', currentUserId).single();
-        const success = await processPurchase(user, type, val, cost);
-        if (success) fetchPrivateData(); 
+        
+        // Pass the calculated totalCost and quantity to the economy processor
+        const success = await processPurchase(user, type, val, totalCost, quantity);
+        
+        if (success) {
+            fetchPrivateData(); // Refresh their wallet and arsenal display
+            
+            // Optional UI Reset: Set the input back to 1 and collapse the accordion
+            if (type === 'bomb') {
+                document.getElementById(`qty-bomb-${val}`).value = 1;
+                document.getElementById(`total-cost-${val}`).innerText = unitCost;
+                document.getElementById(`details-mk${val}`).classList.add('hidden');
+            }
+        }
     });
 });
 

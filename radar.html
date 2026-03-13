@@ -91,15 +91,105 @@
                 </div>
 
                 <div id="view-market" class="hidden panel-box">
-                    <h2>Munitions Factory</h2>
-                    <p style="margin-bottom: 20px;">Use your Supply Points to requisition heavier payloads.</p>
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <button class="buy-btn" data-type="bomb" data-val="2" data-cost="60">Mk-2 Cluster (60 pts)</button>
-                        <button class="buy-btn" data-type="bomb" data-val="3" data-cost="140">Mk-3 Hornet (140 pts)</button>
-                        <button class="buy-btn" data-type="bomb" data-val="5" data-cost="390">Mk-5 Tomahawk (390 pts)</button>
-                        <button class="buy-btn" data-type="bomb" data-val="8" data-cost="1005">Mk-8 Devastator (1005 pts)</button>
-                        <button class="buy-btn" data-type="bomb" data-val="13" data-cost="2650">Mk-13 Armageddon (2650 pts)</button>
+                    <div class="panel-box">
+                        <h3 class="highlight">Munitions Depot</h3>
+                        <p style="margin-bottom: 15px;">Tap an item to view details and select quantity.</p>
+
+                        <div class="market-item" style="border: 1px solid #333; margin-bottom: 10px; background: rgba(0,20,30,0.4);">
+                            <button class="market-toggle" onclick="toggleMarketItem('details-mk2')" style="width: 100%; text-align: left; background: none; border: none; padding: 10px; color: var(--neon-cyan); font-family: inherit; font-size: 1rem; cursor: pointer; display: flex; justify-content: space-between;">
+                                <span>[+] MK-2 Cluster</span>
+                                <span style="color: var(--neon-gold);">60 pts / ea</span>
+                            </button>
+                            <div id="details-mk2" class="market-details hidden" style="padding: 10px; border-top: 1px dashed #333;">
+                                <p style="font-size: 0.9em; margin-bottom: 15px;">Radius of Impact: 2 units.</p>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <label>Qty:</label>
+                                    <input type="number" id="qty-bomb-2" value="1" min="1" max="100" style="width: 60px; padding: 5px; background: #000; color: #FFF; border: 1px solid var(--neon-cyan);" oninput="updateCost(2, 60)">
+                                    <span style="margin-left: auto;">Total: <strong id="total-cost-2" class="gold-text">60</strong></span>
+                                    <button class="buy-btn action-btn" data-type="bomb" data-val="2" data-unitcost="60">BUY</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="market-item" style="border: 1px solid #333; margin-bottom: 10px; background: rgba(0,20,30,0.4);">
+                            <button class="market-toggle" onclick="toggleMarketItem('details-mk3')" style="width: 100%; text-align: left; background: none; border: none; padding: 10px; color: var(--neon-cyan); font-family: inherit; font-size: 1rem; cursor: pointer; display: flex; justify-content: space-between;">
+                                <span>[+] MK-3 Hornet</span>
+                                <span style="color: var(--neon-gold);">140 pts / ea</span>
+                            </button>
+                            <div id="details-mk3" class="market-details hidden" style="padding: 10px; border-top: 1px dashed #333;">
+                                <p style="font-size: 0.9em; margin-bottom: 15px;">Radius of Impact: 3 units.</p>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <label>Qty:</label>
+                                    <input type="number" id="qty-bomb-3" value="1" min="1" max="100" style="width: 60px; padding: 5px; background: #000; color: #FFF; border: 1px solid var(--neon-cyan);" oninput="updateCost(3, 140)">
+                                    <span style="margin-left: auto;">Total: <strong id="total-cost-3" class="gold-text">140</strong></span>
+                                    <button class="buy-btn action-btn" data-type="bomb" data-val="3" data-unitcost="140">BUY</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="market-item" style="border: 1px solid #333; margin-bottom: 10px; background: rgba(0,20,30,0.4);">
+                            <button class="market-toggle" onclick="toggleMarketItem('details-mk5')" style="width: 100%; text-align: left; background: none; border: none; padding: 10px; color: var(--neon-cyan); font-family: inherit; font-size: 1rem; cursor: pointer; display: flex; justify-content: space-between;">
+                                <span>[+] MK-5 Tomahawk</span>
+                                <span style="color: var(--neon-gold);">390 pts / ea</span>
+                            </button>
+                            <div id="details-mk5" class="market-details hidden" style="padding: 10px; border-top: 1px dashed #333;">
+                                <p style="font-size: 0.9em; margin-bottom: 15px;">Radius of Impact: 5 units.</p>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <label>Qty:</label>
+                                    <input type="number" id="qty-bomb-5" value="1" min="1" max="100" style="width: 60px; padding: 5px; background: #000; color: #FFF; border: 1px solid var(--neon-cyan);" oninput="updateCost(5, 390)">
+                                    <span style="margin-left: auto;">Total: <strong id="total-cost-5" class="gold-text">390</strong></span>
+                                    <button class="buy-btn action-btn" data-type="bomb" data-val="5" data-unitcost="390">BUY</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="market-item" style="border: 1px solid #333; margin-bottom: 10px; background: rgba(0,20,30,0.4);">
+                            <button class="market-toggle" onclick="toggleMarketItem('details-mk8')" style="width: 100%; text-align: left; background: none; border: none; padding: 10px; color: var(--neon-cyan); font-family: inherit; font-size: 1rem; cursor: pointer; display: flex; justify-content: space-between;">
+                                <span>[+] MK-8 Devastator</span>
+                                <span style="color: var(--neon-gold);">1005 pts / ea</span>
+                            </button>
+                            <div id="details-mk8" class="market-details hidden" style="padding: 10px; border-top: 1px dashed #333;">
+                                <p style="font-size: 0.9em; margin-bottom: 15px;">Radius of impact:: 8 units.</p>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <label>Qty:</label>
+                                    <input type="number" id="qty-bomb-8" value="1" min="1" max="100" style="width: 60px; padding: 5px; background: #000; color: #FFF; border: 1px solid var(--neon-cyan);" oninput="updateCost(8, 1005)">
+                                    <span style="margin-left: auto;">Total: <strong id="total-cost-8" class="gold-text">1005</strong></span>
+                                    <button class="buy-btn action-btn" data-type="bomb" data-val="8" data-unitcost="1005">BUY</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="market-item" style="border: 1px solid #333; margin-bottom: 10px; background: rgba(0,20,30,0.4);">
+                            <button class="market-toggle" onclick="toggleMarketItem('details-mk13')" style="width: 100%; text-align: left; background: none; border: none; padding: 10px; color: var(--neon-cyan); font-family: inherit; font-size: 1rem; cursor: pointer; display: flex; justify-content: space-between;">
+                                <span>[+] MK-13 Armageddon</span>
+                                <span style="color: var(--neon-gold);">2650 pts / ea</span>
+                            </button>
+                            <div id="details-mk13" class="market-details hidden" style="padding: 10px; border-top: 1px dashed #333;">
+                                <p style="font-size: 0.9em; margin-bottom: 15px;">Radius of Impact: 13 units.</p>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <label>Qty:</label>
+                                    <input type="number" id="qty-bomb-13" value="1" min="1" max="100" style="width: 60px; padding: 5px; background: #000; color: #FFF; border: 1px solid var(--neon-cyan);" oninput="updateCost(13, 2650)">
+                                    <span style="margin-left: auto;">Total: <strong id="total-cost-13" class="gold-text">2650</strong></span>
+                                    <button class="buy-btn action-btn" data-type="bomb" data-val="13" data-unitcost="2650">BUY</button>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+
+                    <script>
+                        // Simple UI helpers for the accordion
+                        function toggleMarketItem(id) {
+                            document.getElementById(id).classList.toggle('hidden');
+                        }
+                        // Ensures the UI instantly reflects the updated price when they change the quantity
+                        function updateCost(radius, unitCost) {
+                            const qtyInput = document.getElementById(`qty-bomb-${radius}`);
+                            // If they delete the number, default to 1 so it doesn't break the math
+                            const qty = Math.max(1, parseInt(qtyInput.value) || 1); 
+                            document.getElementById(`total-cost-${radius}`).innerText = qty * unitCost;
+                        }
+                    </script>
                 </div>
 
                 <div id="view-leaderboard" class="hidden panel-box">

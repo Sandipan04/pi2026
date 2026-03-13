@@ -67,19 +67,23 @@ export async function fetchLeaderboards() {
     }
 }
 
-export async function processPurchase(user, type, val, cost) {
-    if (user.points < cost) {
-        alert("Not enough points!"); return false;
+export async function processPurchase(user, type, val, totalCost, quantity = 1) {
+    if (user.points < totalCost) {
+        alert("Not enough supply points!"); 
+        return false;
     }
 
     if (type === 'bomb') {
         const radius = parseInt(val);
         const column = `bomb_${radius}`;
+        
+        // Add the specific quantity to their current inventory
         await supabase.from('users').update({ 
-            [column]: user[column] + 1, 
-            points: user.points - cost 
+            [column]: user[column] + quantity, 
+            points: user.points - totalCost 
         }).eq('id', user.id);
-        alert(`Acquired 1 Mk-${radius} Cluster Missile!`);
+        
+        alert(`Acquired ${quantity}x Mk-${radius} Cluster Missiles!`);
         return true;
     }
 
@@ -90,7 +94,7 @@ export async function processPurchase(user, type, val, cost) {
             await supabase.from('users').update({ 
                 unlocked_colors: unlocked, 
                 equipped_color: val,
-                points: user.points - cost 
+                points: user.points - totalCost 
             }).eq('id', user.id);
             alert("Color purchased and equipped!");
         } else {
