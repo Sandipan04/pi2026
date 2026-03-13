@@ -35,5 +35,14 @@ export const missions = [
         url: "minigames/puzzle_03/untangle.html",
         guide: "minigames/puzzle_03/untangle.md", // You'll need to make a quick MD guide for the Dossier!
         status: "active"
+    },
+    {
+        id: "minesweeper_9x9",
+        title: "Minesweeper",
+        description: "",
+        reward: 0, 
+        url: "minigames/puzzle_04/minesweeper.html",
+        guide: "minigames/puzzle_04/minesweeper.md", 
+        status: "active"
     }
 ];
