@@ -4,7 +4,7 @@ export const missions = [
         id: "sys_boot",
         title: "Lights Out",
         description: "",
-        reward: 50,
+        reward: 200,
         url: "minigames/puzzle_01/lightsout.html",
         guide: "minigames/puzzle_01/lightsout.md",
         status: "active" 
@@ -31,9 +31,9 @@ export const missions = [
         id: "untangle",
         title: "Untangle",
         description: "",
-        reward: 150, // <-- The JS will fetch this number dynamically!
+        reward: 100, 
         url: "minigames/puzzle_03/untangle.html",
-        guide: "minigames/puzzle_03/untangle.md",
-        status: "locked" 
+        guide: "minigames/puzzle_03/untangle.md", // You'll need to make a quick MD guide for the Dossier!
+        status: "active"
     }
 ];

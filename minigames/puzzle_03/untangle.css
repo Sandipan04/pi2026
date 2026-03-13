@@ -1,0 +1,48 @@
+/* minigames/puzzle_03/untangle.css */
+
+/* --- TWO COLUMN LAYOUT --- */
+.puzzle-container {
+    display: flex; gap: 20px; align-items: flex-start; max-width: 1100px; width: 100%; margin: 0 auto;
+}
+.game-panel { flex: 1.2; text-align: center; }
+.guide-panel { flex: 1; }
+
+@media (max-width: 768px) {
+    .puzzle-container { flex-direction: column; }
+    .guide-panel { width: 100%; }
+}
+
+/* --- Markdown Guide Styles --- */
+.guide-content-area { font-size: 0.95em; line-height: 1.5; color: var(--neon-cyan); }
+.guide-content-area h3 { color: var(--neon-gold); margin-bottom: 10px; font-size: 1.1em; border-bottom: 1px dashed #333; padding-bottom: 5px; }
+.guide-content-area ul,
+.guide-content-area ol { 
+    margin-left: 0; 
+    padding-left: 25px; 
+    margin-bottom: 15px; 
+}
+.guide-content-area li { margin-bottom: 8px; }
+.guide-content-area p { margin-bottom: 15px; }
+.guide-content-area strong { color: var(--neon-pink); }
+
+/* --- UNTANGLE CANVAS STYLES --- */
+.untangle-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden; /* Prevents overflow breaking flexbox */
+}
+
+#untangle-canvas {
+    background: #050a0f;
+    border: 2px solid var(--neon-cyan);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+    cursor: grab;
+    touch-action: none; /* Prevents mobile page scrolling while dragging nodes */
+    max-width: 100%; /* Forces canvas to shrink on mobile */
+    height: auto;
+}
+#untangle-canvas:active { cursor: grabbing; }

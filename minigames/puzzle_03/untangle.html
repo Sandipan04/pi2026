@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUZZLE: Untangle</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="untangle.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1 style="color: var(--neon-cyan);">PUZZLE: Untangle</h1>
+            <nav style="display: flex; gap: 15px; align-items: center;">
+                <div style="color: var(--neon-gold); font-size: 0.9em;">
+                    Supply Points: <strong id="arcade-points">...</strong>
+                </div>
+                <a href="../../arcade.html" class="admin-header-link" style="color: var(--alert-red); border-color: var(--alert-red);">Give Up</a>
+            </nav>
+        </header>
+
+        <main class="main-content puzzle-container">
+            
+            <div class="panel-box game-panel">
+                <h3 class="highlight">Terminal Output</h3>
+                <p style="margin-bottom: 10px;">Untangle the graph to decrypt.</p>
+                <p id="bounty-display" class="gold-text" style="margin-bottom: 20px;">Bounty: Calculating...</p>
+                
+                <div class="untangle-wrapper">
+                    <canvas id="untangle-canvas" width="500" height="400"></canvas>
+                </div>
+                
+                <p id="game-status" style="margin-top: 20px; color: var(--neon-pink); font-weight: bold; min-height: 24px;"></p>
+                <button id="btn-replay" class="win-btn hidden" style="margin-top: 10px; font-size: 1rem; padding: 10px 20px;">INTERCEPT NEW SIGNAL</button>
+            </div>
+
+            <div class="guide-panel" style="width: 100%;">
+                <div style="width: 100%; border: 1px solid var(--neon-cyan); text-align: left;">
+                    <button id="btn-toggle-guide" style="width: 100%; margin: 0; background: rgba(0, 255, 204, 0.1); border: none; padding: 15px; text-align: left; font-weight: bold; cursor: pointer; color: var(--neon-cyan); font-family: inherit; font-size: 1rem; transition: 0.2s;">
+                        [+] EXPAND TACTICAL BRIEFING
+                    </button>
+                    <div id="guide-content" class="hidden guide-content-area" style="padding: 20px; background: rgba(0,0,0,0.8); border-top: 1px dashed var(--neon-cyan);">
+                        Loading decrypted manual...
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script type="module" src="untangle.js"></script>
+</body>
+</html>
