@@ -8,7 +8,7 @@ const bountyDisplay = document.getElementById('bounty-display');
 
 let currentUserId = null;
 let gameActive = true;
-let missionReward = 0; // Will be dynamically loaded
+let missionReward = 0; 
 
 // --- 1. BOOT SEQUENCE & DYNAMIC REWARD ---
 async function verifyClearance() {
@@ -27,14 +27,12 @@ async function fetchPoints() {
 }
 
 function loadMissionIntel() {
-    // 1. Pull dynamic reward
     const missionData = missions.find(m => m.id === "sudoku_6x6");
     if (missionData) {
         missionReward = missionData.reward;
         bountyDisplay.innerText = `Bounty: +${missionReward} Supply Points`;
     }
 
-    // 2. Load the Guide & Wire the Accordion
     const guideContent = document.getElementById('guide-content');
     const toggleBtn = document.getElementById('btn-toggle-guide');
     
@@ -56,7 +54,7 @@ function loadMissionIntel() {
     });
 }
 
-// --- 2. SUDOKU MATHEMATICS ---
+// --- 2. SUDOKU MATHEMATICS (6x6 CORE) ---
 let solutionBoard = [];
 let playBoard = [];
 
@@ -76,17 +74,17 @@ function isValid(board, row, col, num) {
     return true;
 }
 
+// Generate the fully solved master key
 function solveBoard(board) {
     for (let row = 0; row < 6; row++) {
         for (let col = 0; col < 6; col++) {
             if (board[row][col] === 0) {
-                // Shuffle 1-6 to ensure random board generation
                 let nums = [1, 2, 3, 4, 5, 6].sort(() => Math.random() - 0.5);
                 for (let num of nums) {
                     if (isValid(board, row, col, num)) {
                         board[row][col] = num;
                         if (solveBoard(board)) return true;
-                        board[row][col] = 0; // Backtrack
+                        board[row][col] = 0; 
                     }
                 }
                 return false;
@@ -96,28 +94,80 @@ function solveBoard(board) {
     return true;
 }
 
+// Ensure the board only has one valid mathematical reality
+function countSolutions(grid) {
+    let count = 0;
+    function solve() {
+        for (let row = 0; row < 6; row++) {
+            for (let col = 0; col < 6; col++) {
+                if (grid[row][col] === 0) {
+                    for (let num = 1; num <= 6; num++) {
+                        if (isValid(grid, row, col, num)) {
+                            grid[row][col] = num;
+                            solve();
+                            if (count > 1) {
+                                grid[row][col] = 0; 
+                                return; 
+                            }
+                            grid[row][col] = 0; 
+                        }
+                    }
+                    return; 
+                }
+            }
+        }
+        count++; 
+    }
+    solve();
+    return count;
+}
+
+// Dig holes safely, reverting if a bifurcation occurs
+function createUniquePuzzle(fullGrid, targetHoles) {
+    let puzzleGrid = JSON.parse(JSON.stringify(fullGrid));
+    
+    let positions = [];
+    for (let i = 0; i < 36; i++) positions.push(i); // 36 tiles for a 6x6 grid
+    positions.sort(() => Math.random() - 0.5);
+
+    let holesDug = 0;
+    
+    for (let i = 0; i < positions.length; i++) {
+        if (holesDug >= targetHoles) break;
+
+        let row = Math.floor(positions[i] / 6);
+        let col = positions[i] % 6;
+
+        let backupVal = puzzleGrid[row][col];
+        
+        if (backupVal !== 0) {
+            puzzleGrid[row][col] = 0; 
+
+            if (countSolutions(puzzleGrid) === 1) {
+                holesDug++; 
+            } else {
+                puzzleGrid[row][col] = backupVal; 
+            }
+        }
+    }
+    return puzzleGrid;
+}
+
 // --- 3. GAME INITIALIZATION ---
 function initGame() {
     gridElement.innerHTML = '';
     gameActive = true;
     
-    // Generate empty board, solve it, then poke holes
+    // 1. Generate master board
     solutionBoard = Array.from({length: 6}, () => Array(6).fill(0));
     solveBoard(solutionBoard);
-    playBoard = JSON.parse(JSON.stringify(solutionBoard));
+    
+    // 2. Dig unique holes (Remove ~18 clues for standard difficulty)
+    // Note: If the verifier cannot safely remove 18 without causing multiple solutions, 
+    // it will remove as many as mathematically safe and stop.
+    playBoard = createUniquePuzzle(solutionBoard, 18);
 
-    // Remove random clues (Difficulty setting: remove 18 numbers)
-    let cluesToRemove = 18;
-    while (cluesToRemove > 0) {
-        let r = Math.floor(Math.random() * 6);
-        let c = Math.floor(Math.random() * 6);
-        if (playBoard[r][c] !== 0) {
-            playBoard[r][c] = 0;
-            cluesToRemove--;
-        }
-    }
-
-    // Draw the UI Grid
+    // 3. Draw the UI Grid
     for (let r = 0; r < 6; r++) {
         for (let c = 0; c < 6; c++) {
             const cell = document.createElement('div');
@@ -147,18 +197,23 @@ function checkWinCondition() {
     if (!gameActive) return;
     const inputs = document.querySelectorAll('.sudoku-input');
     
-    // Check if every input matches the solution board exactly
     let isWon = true;
+    let isFilled = true;
+
     inputs.forEach(input => {
         let r = parseInt(input.dataset.row);
         let c = parseInt(input.dataset.col);
         let val = parseInt(input.value);
-        if (val !== solutionBoard[r][c]) {
+        
+        if (isNaN(val)) {
+            isFilled = false;
+        } else if (val !== solutionBoard[r][c]) {
             isWon = false;
         }
     });
 
-    if (isWon) {
+    // Only trigger victory if the board is completely filled AND correct
+    if (isFilled && isWon) {
         gameActive = false;
         triggerVictory();
     }
@@ -171,7 +226,6 @@ async function triggerVictory() {
     statusText.innerText = `> Matrix stabilized. Depositing ${missionReward} Supply Points...`;
     statusText.style.color = "var(--neon-cyan)";
 
-    // Use the dynamic reward amount directly!
     const { data, error } = await supabase.rpc('admin_grant_points', { 
         p_target_id: currentUserId, 
         p_points: missionReward 
@@ -198,7 +252,7 @@ document.getElementById('btn-replay').addEventListener('click', () => {
 async function bootSequence() {
     await verifyClearance();
     if (currentUserId) {
-        loadMissionIntel(); // Pulls reward points & guide
+        loadMissionIntel(); 
         await fetchPoints();
         initGame();
     }

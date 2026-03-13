@@ -2,58 +2,69 @@
 import { supabase } from './supabase.js';
 
 export async function fetchLeaderboards() {
-    const list = document.getElementById('leaderboard-list');
-    if (!list) return;
+    const radarList = document.getElementById('leaderboard-radar-list');
+    const supplyList = document.getElementById('leaderboard-supply-list');
 
-    list.innerHTML = "<li style='color: var(--neon-cyan); padding: 10px;'>Decrypting commander logs...</li>";
+    if (radarList) radarList.innerHTML = "<li style='color: var(--neon-cyan); padding: 10px;'>Decrypting radar logs...</li>";
+    if (supplyList) supplyList.innerHTML = "<li style='color: var(--neon-gold); padding: 10px;'>Decrypting supply logs...</li>";
 
-    // Request the new columns: coprimes_found instead of lanterns
-    const { data: leaders, error } = await supabase
+    // --- 1. FETCH RADAR LEADERS (Ordered by coprimes_found) ---
+    const { data: radarLeaders, error: radarError } = await supabase
         .from('users')
-        .select('username, coprimes_found, lifetime_points')
+        .select('username, coprimes_found')
+        .order('coprimes_found', { ascending: false })
+        .limit(10);
+
+    // --- 2. FETCH SUPPLY LEADERS (Ordered by lifetime_points) ---
+    const { data: supplyLeaders, error: supplyError } = await supabase
+        .from('users')
+        .select('username, lifetime_points')
         .order('lifetime_points', { ascending: false })
         .limit(10);
 
-    if (error) {
-        list.innerHTML = `<li style='color: var(--alert-red); padding: 10px;'>Error accessing command logs: ${error.message}</li>`;
-        return;
+    // Handle potential errors
+    if (radarError && radarList) {
+        radarList.innerHTML = `<li style='color: var(--alert-red); padding: 10px;'>Error: ${radarError.message}</li>`;
+    }
+    if (supplyError && supplyList) {
+        supplyList.innerHTML = `<li style='color: var(--alert-red); padding: 10px;'>Error: ${supplyError.message}</li>`;
     }
 
-    list.innerHTML = '';
+    // --- 3. BUILD UI STRINGS ---
     
-    if (leaders.length === 0) {
-        list.innerHTML = "<li style='padding: 10px;'>No active commanders found in this sector.</li>";
-        return;
-    }
-
-    // Build the Top Commanders UI
-    leaders.forEach((user, index) => {
+    // Helper function to build the rows
+    const buildRow = (user, index, metricLabel, metricValue, highlightClass) => {
         const rank = index + 1;
-        
-        // Color-code the Top 3 commanders for bragging rights
         let rankColor = "var(--neon-cyan)";
         if (rank === 1) rankColor = "var(--neon-gold)";
-        else if (rank === 2) rankColor = "#C0C0C0"; // Silver
-        else if (rank === 3) rankColor = "#CD7F32"; // Bronze
+        else if (rank === 2) rankColor = "#C0C0C0"; 
+        else if (rank === 3) rankColor = "#CD7F32"; 
 
-        const li = document.createElement('li');
-        li.style.padding = "10px 5px";
-        li.style.borderBottom = "1px dashed rgba(0, 255, 204, 0.2)";
-        li.style.display = "flex";
-        li.style.justifyContent = "space-between";
-        li.style.alignItems = "center";
-        
-        li.innerHTML = `
-            <span style="color: ${rankColor}; font-weight: bold; font-size: 1.1em;">
-                #${rank} ${user.username}
-            </span>
-            <span style="font-size: 0.9em; opacity: 0.9;">
-                Radar Bases: <span class="highlight">${user.coprimes_found || 0}</span> | 
-                XP: <span class="gold-text">${user.lifetime_points || 0}</span>
-            </span>
+        return `
+            <li style="padding: 10px 5px; border-bottom: 1px dashed rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: ${rankColor}; font-weight: bold; font-size: 1.1em;">
+                    #${rank} ${user.username}
+                </span>
+                <span style="font-size: 0.9em; opacity: 0.9;">
+                    ${metricLabel}: <strong class="${highlightClass}">${metricValue}</strong>
+                </span>
+            </li>
         `;
-        list.appendChild(li);
-    });
+    };
+
+    // Populate Radar List
+    if (radarList && radarLeaders) {
+        radarList.innerHTML = radarLeaders.length === 0 
+            ? "<li style='padding: 10px;'>No active bombers found.</li>" 
+            : radarLeaders.map((u, i) => buildRow(u, i, "Bases", u.coprimes_found || 0, "highlight")).join('');
+    }
+
+    // Populate Supply List
+    if (supplyList && supplyLeaders) {
+        supplyList.innerHTML = supplyLeaders.length === 0 
+            ? "<li style='padding: 10px;'>No puzzlers found.</li>" 
+            : supplyLeaders.map((u, i) => buildRow(u, i, "XP", u.lifetime_points || 0, "gold-text")).join('');
+    }
 }
 
 export async function processPurchase(user, type, val, cost) {

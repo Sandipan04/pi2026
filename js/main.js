@@ -24,6 +24,8 @@ let currentUserId = null;
 let equippedColor = '1';
 let currentTool = '2'; // Default to smallest bomb
 
+let lastFireTime = 0; // <-- NEW: Tracks the exact millisecond of the last launch
+
 let localPoints = 0;
 let localLifetime = 0;
 let localBomb2 = 0; let localBomb3 = 0; let localBomb5 = 0; let localBomb8 = 0; let localBomb13 = 0;
@@ -434,10 +436,16 @@ canvas.addEventListener('touchend', (e) => {
         initialPinchDistance = null;
         wasZoomingOrPanning = false; 
     }
-});
+}, { passive: false });
 
 // Mouse Click: Fire Missiles
 canvas.addEventListener('click', async () => {
+    // --- NEW: THE GHOST CLICK DEBOUNCE ---
+    const now = Date.now();
+    // If less than 400ms have passed since the last missile, ignore the input!
+    if (now - lastFireTime < 400) return; 
+    lastFireTime = now;
+
     // CRITICAL FIX: If they dragged the map, abort the missile launch!
     if (dragDistance > 5) return;
 
@@ -445,11 +453,11 @@ canvas.addEventListener('click', async () => {
     if (hoverX < 0 || hoverY < 0) return; 
 
     // --- MUNITIONS VALIDATION ---
-    if (currentTool === '2' && localBomb2 <= 0) { alert("Out of Mk-2 Clusters!"); return; }
-    if (currentTool === '3' && localBomb3 <= 0) { alert("Out of Mk-3 Clusters!"); return; }
-    if (currentTool === '5' && localBomb5 <= 0) { alert("Out of Mk-5 Clusters!"); return; }
-    if (currentTool === '8' && localBomb8 <= 0) { alert("Out of Mk-8 Clusters!"); return; }
-    if (currentTool === '13' && localBomb13 <= 0) { alert("Out of Mk-13 Clusters!"); return; }
+    if (currentTool === '2' && localBomb2 <= 0) { log("Out of Mk-2 Clusters!"); return; }
+    if (currentTool === '3' && localBomb3 <= 0) { log("Out of Mk-3 Clusters!"); return; }
+    if (currentTool === '5' && localBomb5 <= 0) { log("Out of Mk-5 Clusters!"); return; }
+    if (currentTool === '8' && localBomb8 <= 0) { log("Out of Mk-8 Clusters!"); return; }
+    if (currentTool === '13' && localBomb13 <= 0) { log("Out of Mk-13 Clusters!"); return; }
 
     let blastRadius = parseInt(currentTool);
     let coordsToProcess = [];

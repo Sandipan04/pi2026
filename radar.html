@@ -103,8 +103,21 @@
                 </div>
 
                 <div id="view-leaderboard" class="hidden panel-box">
-                    <h2>Top Commanders</h2>
-                    <ul id="leaderboard-list" style="list-style-type: none; margin-top: 20px;"></ul>
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
+    
+                        <div class="panel-box" style="flex: 1; min-width: 300px; border-color: var(--neon-cyan);">
+                            <h3 style="color: var(--neon-cyan); border-bottom-color: var(--neon-cyan);">Top Bombers (Radar Bases)</h3>
+                            <ul id="leaderboard-radar-list" style="list-style: none; padding: 0; margin-top: 15px;">
+                                </ul>
+                        </div>
+
+                        <div class="panel-box" style="flex: 1; min-width: 300px; border-color: var(--neon-gold);">
+                            <h3 style="color: var(--neon-gold); border-bottom-color: var(--neon-gold);">Top Puzzlers (Supply Points)</h3>
+                            <ul id="leaderboard-supply-list" style="list-style: none; padding: 0; margin-top: 15px;">
+                                </ul>
+                        </div>
+
+                    </div>
                 </div>
 
             </section>
