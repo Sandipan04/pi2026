@@ -25,89 +25,113 @@
        .hero h1 { font-size: 3rem; color: var(--neon-pink); text-shadow: 0 0 15px var(--neon-pink); }
        .hero-btn { display: inline-block; margin-top: 20px; font-size: 1.5rem; padding: 15px 40px; background: var(--neon-cyan); color: #000; text-decoration: none; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
        .hero-btn:hover { box-shadow: 0 0 20px var(--neon-cyan); transform: scale(1.05); }
-      
-       /* --- NEW TWO-COLUMN LAYOUT --- */
-       .dossier-wrapper {
-           display: flex;
-           gap: 30px;
-           align-items: flex-start; /* Required for sticky positioning to work */
-           margin-bottom: 50px;
-       }
+
+        /* --- TOP RIGHT DOCS LINK --- */
+        .top-nav {
+            display: flex;
+            justify-content: flex-end; /* Pushes the button to the far right */
+            padding-top: 20px;
+        }
+        .doc-link {
+            color: var(--neon-gold);
+            text-decoration: none;
+            font-family: inherit;
+            font-size: 0.9rem;
+            border: 1px dashed var(--neon-gold);
+            padding: 8px 15px;
+            transition: 0.2s;
+            background: rgba(255, 215, 0, 0.05);
+        }
+        .doc-link:hover {
+            background: var(--neon-gold);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-gold);
+        }
+        /* --- NEW TWO-COLUMN LAYOUT --- */
+        .dossier-wrapper {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start; /* Required for sticky positioning to work */
+            margin-bottom: 50px;
+        }
 
 
-       /* --- THE STICKY SIDEBAR --- */
-       .sidebar {
-           flex: 0 0 280px;
-           position: sticky;
-           top: 20px; /* How far from the top of the screen it sticks */
-           background: rgba(0, 20, 30, 0.8);
-           border: 1px solid var(--neon-cyan);
-           padding: 20px;
-           box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
-       }
+        /* --- THE STICKY SIDEBAR --- */
+        .sidebar {
+            flex: 0 0 280px;
+            position: sticky;
+            top: 20px; /* How far from the top of the screen it sticks */
+            background: rgba(0, 20, 30, 0.8);
+            border: 1px solid var(--neon-cyan);
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
+        }
 
 
-       .sidebar h3 { color: var(--neon-cyan); border-bottom: 1px dashed var(--neon-cyan); padding-bottom: 10px; margin-bottom: 15px; }
-      
-       .sidebar a {
-           display: block;
-           color: var(--neon-gold);
-           text-decoration: none;
-           margin-bottom: 12px;
-           font-size: 0.95em;
-           transition: 0.2s;
-           line-height: 1.3;
-       }
-      
-       .sidebar a:hover {
-           color: var(--neon-pink);
-           padding-left: 8px; /* Cool hover indent effect */
-       }
-
-
-       /* --- THE MAIN CONTENT --- */
-       .dossier-content {
-           flex: 1;
-           min-width: 0;
-       }
-
-       /* --- ADDED EDGE PADDING TO THE APP CONTAINER --- */
-        .app-container {
-            max-width: 1200px; 
-            margin: 0 auto; 
+        .sidebar h3 { color: var(--neon-cyan); border-bottom: 1px dashed var(--neon-cyan); padding-bottom: 10px; margin-bottom: 15px; }
+        
+        .sidebar a {
             display: block;
-            padding: 0 15px; /* <--- NEW: Forces 15px of breathing room on mobile screens */
-            box-sizing: border-box;
+            color: var(--neon-gold);
+            text-decoration: none;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            transition: 0.2s;
+            line-height: 1.3;
+        }
+        
+        .sidebar a:hover {
+            color: var(--neon-pink);
+            padding-left: 8px; /* Cool hover indent effect */
         }
 
-        /* --- UPDATED GUIDE SECTION --- */
-        .guide-section { 
-            background: rgba(0, 20, 30, 0.5); 
-            border: 1px solid #333; 
-            padding: 25px; /* Increased internal padding */
-            margin-bottom: 30px; 
-            box-sizing: border-box; /* <--- CRITICAL: Stops padding from pushing the box off-screen */
-            width: 100%;
-            overflow-x: auto; /* <--- CRITICAL: Allows horizontal scrolling if a LaTeX equation is too long */
+        /* --- THE MAIN CONTENT --- */
+        .dossier-content {
+            flex: 1;
+            min-width: 0;
         }
-      
-       /* Markdown generated styles */
-       .guide-section h3 { color: var(--neon-gold); margin-bottom: 10px; border-bottom: 1px dashed #333; padding-bottom: 5px; }
-       .guide-section ul { margin-left: 20px; margin-bottom: 10px; }
-       .guide-section p { margin-bottom: 10px; }
-       .guide-section strong { color: var(--neon-cyan); }
+
+        /* --- ADDED EDGE PADDING TO THE APP CONTAINER --- */
+            .app-container {
+                max-width: 1200px; 
+                margin: 0 auto; 
+                display: block;
+                padding: 0 15px; /* <--- NEW: Forces 15px of breathing room on mobile screens */
+                box-sizing: border-box;
+            }
+
+            /* --- UPDATED GUIDE SECTION --- */
+            .guide-section { 
+                background: rgba(0, 20, 30, 0.5); 
+                border: 1px solid #333; 
+                padding: 25px; /* Increased internal padding */
+                margin-bottom: 30px; 
+                box-sizing: border-box; /* <--- CRITICAL: Stops padding from pushing the box off-screen */
+                width: 100%;
+                overflow-x: auto; /* <--- CRITICAL: Allows horizontal scrolling if a LaTeX equation is too long */
+            }
+        
+        /* Markdown generated styles */
+        .guide-section h3 { color: var(--neon-gold); margin-bottom: 10px; border-bottom: 1px dashed #333; padding-bottom: 5px; }
+        .guide-section ul { margin-left: 20px; margin-bottom: 10px; }
+        .guide-section p { margin-bottom: 10px; }
+        .guide-section strong { color: var(--neon-cyan); }
 
 
-       /* Mobile layout override */
-       @media (max-width: 768px) {
-           .dossier-wrapper { flex-direction: column; }
-           .sidebar { position: static; width: 100%; flex: none; margin-bottom: 20px; }
-       }
+        /* Mobile layout override */
+        @media (max-width: 768px) {
+            .dossier-wrapper { flex-direction: column; }
+            .sidebar { position: static; width: 100%; flex: none; margin-bottom: 20px; }
+        }
    </style>
 </head>
 <body>
    <div class="app-container" style="max-width: 1200px; margin: 0 auto; display: block;">
-      
+
+        <div class="top-nav">
+           <a href="doc/index.html" class="doc-link">[ DEVELOPER DOCS ]</a>
+       </div>
+       
        <section class="hero">
            <h1>WORLD WAR 3.14159</h1>
            <p style="font-size: 1.2rem; margin-top: 10px; color: var(--neon-cyan);">Strategic Warfare for Approximating $\pi$.</p>
