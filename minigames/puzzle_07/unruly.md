@@ -1,7 +1,7 @@
 ### Unruly
 
 **Objective:**   
-Fill the given square with green/purple colours satisfying the rules below. Single click to fill black and double click to fill white. (If you want to remove the colour, click a third time)
+Fill the given square with green/purple colours satisfying the rules below. Single click to fill green and double click to fill purple. (If you want to remove the colour, click a third time)
 
 **Rules:**  
 1\. No three consecutive squares, horizontally or vertically, have the same colour.
