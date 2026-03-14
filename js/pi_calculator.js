@@ -1,47 +1,25 @@
 // js/pi_calculator.js
 
-// The global milestone requirement. Change this one number to balance the whole game!
+// The global milestone requirement. Linear scaling: 100k, 200k, 300k, etc.
 export const ERROR_THRESHOLD_STEP = 100000;
 
 export function calculatePi(totalExplored, totalCoprime, globalPoints, adminTierOverride = 0) {
-    if (totalCoprime === 0 || totalExplored === 0) return { pi: "Calibrating...", tier: 0, nextGoal: ERROR_THRESHOLD_STEP };
+    if (totalCoprime === 0 || totalExplored === 0) {
+        return { pi: "Calibrating...", tier: 0, nextGoal: ERROR_THRESHOLD_STEP };
+    }
 
     // 1. Determine Tier dynamically based on global points OR the admin override
+    // Linear progression: 0-99k = Tier 0, 100k-199k = Tier 1, 200k-299k = Tier 2...
     let tier = adminTierOverride > 0 
         ? adminTierOverride 
         : Math.floor(globalPoints / ERROR_THRESHOLD_STEP);
         
-    // Calculate the next milestone dynamically (e.g., if Tier is 2, next goal is 300,000)
+    // Calculate the next linear milestone for the HUD
     let nextGoal = (tier + 1) * ERROR_THRESHOLD_STEP;
 
-    // 2. Apply Error Term Corrections R(n)
-    // Because totalExplored is an Area (n^2), we take the square root to find the approximate side length (n)
-    let nApprox = Math.sqrt(totalExplored);
-    let errorTerm = 0;
-    
-    if (tier >= 1) {
-        // First order correction: O(n log n)
-        errorTerm += nApprox * Math.log(nApprox);
-    }
-    if (tier >= 2) {
-        // Second order correction: O(n)
-        errorTerm += nApprox; 
-    }
-    if (tier >= 3) {
-         // Third order correction: O(sqrt(n))
-         errorTerm += Math.sqrt(nApprox);
-    }
-    // Note: If the server reaches Tier 4 (400,000 pts), the error term currently 
-    // caps at the 3rd order correction, which fits the mathematical limits of this specific asymptotic expansion!
-
-    // Subtract the error term from the denominator
-    const adjustedDenominator = totalCoprime - errorTerm;
-    
-    // Failsafe: If the error term overcorrects, wait for players to explore more tiles
-    if (adjustedDenominator <= 0) return { pi: "Filtering noise...", tier, nextGoal };
-
-    // 3. Calculate! pi = sqrt((6 * totalExplored) / (Q(n) - R(n)))
-    const piEstimate = Math.sqrt((6 * totalExplored) / adjustedDenominator);
+    // 2. Pure Mathematical Pi Calculation (No faked error corrections)
+    // The probability of two random numbers being coprime is 6 / pi^2.
+    const piEstimate = Math.sqrt((6 * totalExplored) / totalCoprime);
     
     return {
         pi: piEstimate.toFixed(5),
