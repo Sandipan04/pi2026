@@ -101,8 +101,8 @@ async function fetchPublicData() {
         const piData = calculatePi(stats.total_explored, stats.total_coprime, stats.global_points, stats.pi_tier_override);    
 
         globalGridSize = 100;
-        // If the total explored area is >= 90% of the current grid's maximum area, expand!
-        while (stats.total_explored >= 0.9 * (globalGridSize * globalGridSize)) {
+        // If the total explored area is >= 60% of the current grid's maximum area, expand!
+        while (stats.total_explored >= 0.6 * (globalGridSize * globalGridSize)) {
             globalGridSize += 100;
         }
         
