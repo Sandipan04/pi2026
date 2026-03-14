@@ -28,18 +28,21 @@
 
         .wiki-content {
             flex-grow: 1;
-            min-width: 0; /* CRITICAL FIX: Prevents large <pre> code blocks from blowing out the flex container and overlapping */
+            min-width: 0; 
             background: rgba(0, 20, 30, 0.4);
             padding: 40px;
             border: 1px solid var(--neon-cyan);
             border-radius: 8px;
             box-shadow: 0 0 20px rgba(0, 255, 204, 0.05);
             min-height: 60vh;
+            box-sizing: border-box; /* <--- CRITICAL FIX */
+            max-width: 100%; /* <--- CRITICAL FIX */
         }
 
         @media (max-width: 800px) {
             .wiki-container { flex-direction: column; }
             .wiki-sidebar { width: 100%; position: relative; top: 0; }
+            .wiki-content { padding: 20px; } /* <--- CRITICAL FIX: Less padding on mobile */
         }
 
         /* --- SIDEBAR NAVIGATION BUTTONS --- */
@@ -128,6 +131,8 @@
             overflow-x: auto; 
             margin-bottom: 25px; 
             box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            box-sizing: border-box; /* <--- CRITICAL FIX */
+            max-width: 100%; /* <--- CRITICAL FIX */
         }
         #rendered-markdown code { 
             font-family: 'Share Tech Mono', monospace; 
