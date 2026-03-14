@@ -1,0 +1,117 @@
+/* minigames/puzzle_08/net.css */
+
+/* --- TWO COLUMN LAYOUT --- */
+.puzzle-container {
+    display: flex; gap: 20px; align-items: flex-start; max-width: 1100px; width: 100%; margin: 0 auto;
+}
+.game-panel { flex: 1.2; text-align: center; }
+.guide-panel { flex: 1; }
+
+@media (max-width: 768px) {
+    .puzzle-container { flex-direction: column; }
+    .guide-panel { width: 100%; }
+}
+
+/* --- Markdown Guide Styles --- */
+.guide-content-area { font-size: 0.95em; line-height: 1.5; color: var(--neon-cyan); }
+.guide-content-area h3 { color: var(--neon-gold); margin-bottom: 10px; font-size: 1.1em; border-bottom: 1px dashed #333; padding-bottom: 5px; }
+.guide-content-area ul, .guide-content-area ol { margin-left: 0; padding-left: 25px; margin-bottom: 15px; }
+.guide-content-area li { margin-bottom: 8px; }
+.guide-content-area p { margin-bottom: 15px; }
+.guide-content-area strong { color: var(--neon-pink); }
+
+/* --- SIGNAL RELAY GRID --- */
+.net-grid {
+    display: grid;
+    /* 7x7 Grid */
+    grid-template-columns: repeat(7, 1fr);
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    background: #02040a;
+    border: 2px solid var(--neon-cyan);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
+    gap: 2px;
+    padding: 2px;
+    background-color: rgba(255,255,255,0.1); /* Thin grid lines */
+}
+
+.net-cell {
+    aspect-ratio: 1 / 1;
+    background: #0a0b10;
+    position: relative;
+    cursor: pointer;
+    /* Smooth rotation animation */
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.net-cell:hover {
+    background: rgba(0, 255, 204, 0.05);
+}
+
+/* The Central Server/Power Source */
+.net-cell.is-center::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 12px; height: 12px;
+    background: var(--neon-gold);
+    box-shadow: 0 0 10px var(--neon-gold);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+}
+
+/* --- WIRE DRAWING (Using absolute divs) --- */
+.wire {
+    position: absolute;
+    background: #444; /* Unpowered state (Dim Grey) */
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+/* Powered State */
+.net-cell.powered .wire {
+    background: var(--neon-cyan);
+    box-shadow: 0 0 8px var(--neon-cyan);
+}
+
+/* Port Positions */
+.wire.port-0 { top: 0; left: calc(50% - 3px); width: 6px; height: 50%; } /* UP */
+.wire.port-1 { top: calc(50% - 3px); left: 50%; width: 50%; height: 6px; } /* RIGHT */
+.wire.port-2 { top: 50%; left: calc(50% - 3px); width: 6px; height: 50%; } /* DOWN */
+.wire.port-3 { top: calc(50% - 3px); left: 0; width: 50%; height: 6px; } /* LEFT */
+
+/* Center Hub (Connects the wires visually in the middle) */
+.wire-hub {
+    position: absolute;
+    top: calc(50% - 3px); left: calc(50% - 3px);
+    width: 6px; height: 6px;
+    background: #444;
+    transition: background 0.3s, box-shadow 0.3s;
+}
+.net-cell.powered .wire-hub {
+    background: var(--neon-cyan);
+    box-shadow: 0 0 8px var(--neon-cyan);
+}
+
+/* --- DATA TERMINALS (Endpoints) --- */
+/* Transform the standard tiny wire hub into a chunky hardware terminal */
+.net-cell.is-endpoint .wire-hub {
+    width: 16px;
+    height: 16px;
+    top: calc(50% - 8px);
+    left: calc(50% - 8px);
+    background: #0a0b10;
+    border: 2px solid #555; /* Unpowered offline state */
+    border-radius: 3px;
+    z-index: 2;
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+/* When the terminal receives power from the Cyan wire, boot it up in Neon Pink! */
+.net-cell.powered.is-endpoint .wire-hub {
+    background: var(--neon-pink);
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 15px var(--neon-pink);
+}

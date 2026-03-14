@@ -71,5 +71,14 @@ export const missions = [
         url: "minigames/puzzle_07/unruly.html",
         guide: "minigames/puzzle_07/unruly.md", 
         status: "active"
+    },
+    {
+        id: "net",
+        title: "Net",
+        description: "",
+        reward: 50, 
+        url: "minigames/puzzle_08/net.html",
+        guide: "minigames/puzzle_08/net.md", 
+        status: "active"
     }
 ];

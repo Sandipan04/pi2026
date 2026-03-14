@@ -1,6 +1,7 @@
 ### Sudoku
 
-**Objective:** Fill the 6x6 grid following given rules.
+**Objective:**  
+Fill the 6x6 grid following given rules.
 
 **Rules:**  
 1\. Every **row** must contain the numbers 1 through 6 exactly once.  
