@@ -1,119 +1,84 @@
 // js/grid.js
+
 export const canvas = document.getElementById('universe');
-export const ctx = canvas.getContext('2d');
+export const ctx = canvas ? canvas.getContext('2d') : null;
 
-// --- CAMERA & RENDER SETTINGS ---
+// Keep the camera object so main.js doesn't crash
 export const camera = { x: 0, y: 0, zoom: 1 };
-const BASE_TILE_SIZE = 15; 
-export const MARGIN_LEFT = 40;   
-export const MARGIN_BOTTOM = 40; 
 
-// Helper function to convert screen pixels into Math Grid coordinates
 export function getGridCoords(mouseX, mouseY) {
-    const tileSize = BASE_TILE_SIZE * camera.zoom;
-    const originX = MARGIN_LEFT + camera.x;
-    const originY = canvas.height - MARGIN_BOTTOM + camera.y; 
+    // Kill-switch: Prevents dropping payloads
+    return { gridX: -1, gridY: -1 }; 
+}
 
-    const gridX = Math.floor((mouseX - originX) / tileSize);
-    const gridY = Math.floor((originY - mouseY) / tileSize);
+// --- NEW: Custom Text Wrapping Engine ---
+function drawWrappedText(text, color, fontSize, isBold, startY, maxWidth) {
+    ctx.font = `${isBold ? 'bold ' : ''}${fontSize}px 'Share Tech Mono', monospace`;
+    ctx.fillStyle = color;
 
-    return { gridX, gridY };
+    const words = text.split(' ');
+    let line = '';
+    const lines = [];
+
+    // Measure words and break them into lines
+    for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
+        
+        if (testWidth > maxWidth && n > 0) {
+            lines.push(line);
+            line = words[n] + ' ';
+        } else {
+            line = testLine;
+        }
+    }
+    lines.push(line);
+
+    // Draw each line and calculate total height
+    const lineHeight = fontSize * 1.4;
+    let currentY = startY;
+
+    for (let i = 0; i < lines.length; i++) {
+        ctx.fillText(lines[i], canvas.width / 2, currentY);
+        currentY += lineHeight;
+    }
+
+    // Return the total vertical space used so the next paragraph knows where to start
+    return lines.length * lineHeight; 
 }
 
 export function drawGrid(loadedChunks, hoverX, hoverY) {
-    // 1. Draw Deep Space Background
-    ctx.fillStyle = "#0a0b10"; 
+    if (!ctx) return;
+    
+    // 1. Clear the entire canvas
+    ctx.fillStyle = "rgba(0, 10, 15, 1)"; 
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const tileSize = BASE_TILE_SIZE * camera.zoom;
-    const originX = MARGIN_LEFT + camera.x;
-    const originY = canvas.height - MARGIN_BOTTOM + camera.y;
-
-    // 2. Draw Faint High-Tech Blueprint Lines (Expanded for infinite scrolling)
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.05)"; 
-    ctx.lineWidth = 1;
-
-    // We draw grid lines far out so the universe feels infinite
-    for (let i = 0; i <= 1000; i += 10) { 
-        let cx = originX + (i * tileSize);
-        let cy = originY - (i * tileSize);
-        
-        ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, canvas.height); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(canvas.width, cy); ctx.stroke();
-    }
-
-    // 3. Draw the solid white Math Axes
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(originX, 0); ctx.lineTo(originX, canvas.height); // Y Axis
-    ctx.moveTo(0, originY); ctx.lineTo(canvas.width, originY); // X Axis
-    ctx.stroke();
-
-    // 4. Plot the Cosmic Data across ALL loaded chunks!
-    if (!loadedChunks) return;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top"; // Switched to top so wrapping math is easier
     
-    for (const [chunkId, chunkData] of Object.entries(loadedChunks)) {
-        // Extract the chunk's global position from its ID (e.g., "1_0" -> chunkX: 1, chunkY: 0)
-        const [chunkX, chunkY] = chunkId.split('_').map(Number);
+    const centerY = canvas.width < 600 ? canvas.height / 4 : canvas.height / 3;
+    
+    // 2. Set strict boundaries for mobile (canvas width minus 40px of padding)
+    const maxWidth = Math.max(canvas.width - 40, 250);
 
-        for (let i = 0; i < chunkData.length; i++) {
-            const char = chunkData[i];
-            if (char === '0') continue;
+    // 3. Responsive base font sizes
+    const isMobile = canvas.width < 600;
+    const headSize = isMobile ? 24 : 36;
+    const subSize = isMobile ? 18 : 26;
+    
+    // 4. Draw paragraphs dynamically. Each one starts below the previous one!
+    let currentY = centerY;
 
-            // Calculate Local Chunk Coordinates
-            const localX = i % 100;
-            const localY = Math.floor(i / 100);
-
-            // Translate to Global Universe Coordinates
-            const globalX = (chunkX * 100) + localX;
-            const globalY = (chunkY * 100) + localY;
-
-            const drawX = originX + (globalX * tileSize);
-            const drawY = originY - ((globalY + 1) * tileSize);
-            const centerX = drawX + tileSize / 2;
-            const centerY = drawY + tileSize / 2;
-
-            // Optimization: Don't render tiles that are way off-screen
-            if (drawX < -50 || drawX > canvas.width + 50 || drawY < -50 || drawY > canvas.height + 50) {
-                continue; 
-            }
-
-            ctx.beginPath();
-            
-            if (char === '2') {
-                ctx.arc(centerX, centerY, tileSize * 0.2, 0, Math.PI * 2);
-                ctx.fillStyle = "#443333";
-                ctx.fill();
-            } else {
-                ctx.arc(centerX, centerY, tileSize * 0.35, 0, Math.PI * 2);
-                if (char === '1') ctx.fillStyle = "#00FFCC"; 
-                else if (char === '3') ctx.fillStyle = "#FF00FF"; 
-                else if (char === '4') ctx.fillStyle = "#FFD700"; 
-                
-                ctx.shadowColor = ctx.fillStyle;
-                ctx.shadowBlur = 15 * camera.zoom; 
-                ctx.fill();
-                ctx.shadowBlur = 0; 
-            }
-        }
-    }
-
-    // 5. Draw the Targeting Reticle
-    if (hoverX >= 0 && hoverY >= 0) {
-        const targetX = originX + (hoverX * tileSize);
-        const targetY = originY - ((hoverY + 1) * tileSize);
-        
-        ctx.strokeStyle = "rgba(255, 255, 0, 0.8)";
-        ctx.lineWidth = 2 * camera.zoom;
-        
-        const size = tileSize;
-        const edge = size * 0.3;
-        ctx.beginPath();
-        ctx.moveTo(targetX, targetY + edge); ctx.lineTo(targetX, targetY); ctx.lineTo(targetX + edge, targetY);
-        ctx.moveTo(targetX + size - edge, targetY); ctx.lineTo(targetX + size, targetY); ctx.lineTo(targetX + size, targetY + edge);
-        ctx.moveTo(targetX + size, targetY + size - edge); ctx.lineTo(targetX + size, targetY + size); ctx.lineTo(targetX + size - edge, targetY + size);
-        ctx.moveTo(targetX + edge, targetY + size); ctx.lineTo(targetX, targetY + size); ctx.lineTo(targetX, targetY + size - edge);
-        ctx.stroke();
-    }
+    currentY += drawWrappedText("Some anomaly has been detected.", "#FF3333", headSize, true, currentY, maxWidth);
+    currentY += (isMobile ? 15 : 25); // Paragraph spacing
+    
+    currentY += drawWrappedText("Hence, the warzone is closed.", "#00FFCC", subSize, false, currentY, maxWidth);
+    currentY += (isMobile ? 30 : 45); // Larger gap before the Pi reveal
+    
+    currentY += drawWrappedText("Our final approximation for pi was 3.14139.", "#FF00FF", subSize, false, currentY, maxWidth);
+    currentY += (isMobile ? 15 : 25);
+    
+    drawWrappedText("You can still continue with the arcade games.", "#FFD700", subSize, false, currentY, maxWidth);
 }
